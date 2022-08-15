@@ -12,14 +12,11 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -yq \
     g++ \
     libboost-all-dev \
     python3-pip \
-    python3-lxml \
-    doxygen \
     libfftw3-dev \
     libsdl1.2-dev \
     libgsl-dev \
     liblog4cpp5-dev \
     libzmq3-dev \
-    libsndfile1-dev \
     python3-gi-cairo \
     gobject-introspection \
     libgmp3-dev \
@@ -31,18 +28,18 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -yq \
     pip3 install mako pybind11[global] click click-plugins pgi scipy numpy zmq pyyaml sphinx jsonschema && \
     rm -rf /var/lib/apt/lists/*
 
-# Install UHD
-RUN mkdir /build && \
-    cd /build && \
-    git clone --depth 1 --branch v4.2.0.1 --recursive https://github.com/EttusResearch/uhd.git && \
-    mkdir -p /build/uhd/host/build && \
-    cd /build/uhd/host/build && \
-    cmake -DCMAKE_BUILD_TYPE=Release ../ && \
-    make -j12  && \
-    make install && \
-    ldconfig && \
-    # uhd_images_downloader && \
-    cd
+# # Install UHD
+# RUN mkdir /build && \
+#     cd /build && \
+#     git clone --depth 1 --branch v4.2.0.1 --recursive https://github.com/EttusResearch/uhd.git && \
+#     mkdir -p /build/uhd/host/build && \
+#     cd /build/uhd/host/build && \
+#     cmake -DCMAKE_BUILD_TYPE=Release ../ && \
+#     make -j12  && \
+#     make install && \
+#     ldconfig && \
+#     # uhd_images_downloader && \
+#     cd
 
 # Install Volk
 RUN cd /build && \
