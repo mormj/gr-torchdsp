@@ -78,6 +78,7 @@ int triton_block_impl::work(
     auto batch_size = noutput_items / num_items_per_batch;
     model_->infer_batch(in_ptrs, out_ptrs, batch_size);
 
+    // std::cout << fmt::format("noutput_items: {}, batch_size: {}", noutput_items, batch_size) << std::endl;
     return noutput_items;
 }
 

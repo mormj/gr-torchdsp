@@ -11,6 +11,7 @@
 from gnuradio import blocks
 import torchdsp
 from gnuradio import gr
+from gnuradio import fft
 import sys
 import signal
 from argparse import ArgumentParser
@@ -34,16 +35,32 @@ class benchmark_copy(gr.top_block):
         ##################################################
         op_blocks = []
         for i in range(num_blocks):
-            op_blocks.append(
-                blocks.add_ff()
-            )
-
-        src = blocks.null_source(
-            gr.sizeof_float*veclen)
-        snk = blocks.null_sink(
-            gr.sizeof_float*veclen)
-        hd = blocks.head(
-            gr.sizeof_float*veclen, actual_samples)
+            if args.operation == 'add':
+                op_blocks.append(
+                    blocks.add_ff()
+                )
+            elif args.operation == 'fft':
+                op_blocks.append(
+                    fft.fft_vcc(args.veclen, True, [])
+                )
+                # op_blocks[-1].set_min_output_buffer(2*args.batch_size*args.veclen)
+        
+        if args.operation == 'fft':
+            src = blocks.null_source(
+                gr.sizeof_gr_complex*veclen)
+            # src.set_min_output_buffer(2*args.batch_size*args.veclen)
+            snk = blocks.null_sink(
+                gr.sizeof_gr_complex*veclen)
+                
+            hd = blocks.head(
+                gr.sizeof_gr_complex*veclen, actual_samples)
+        else:
+            src = blocks.null_source(
+                gr.sizeof_float*veclen)
+            snk = blocks.null_sink(
+                gr.sizeof_float*veclen)
+            hd = blocks.head(
+                gr.sizeof_float*veclen, actual_samples)
 
         ##################################################
         # Connections
@@ -55,6 +72,7 @@ class benchmark_copy(gr.top_block):
             else:
                 self.connect(op_blocks[idx-1], (blk, 0))
 
+        if args.operation in ['add']:
             ns = blocks.null_source(gr.sizeof_float*veclen)
             self.connect(ns, (blk, 1))
 
@@ -67,9 +85,10 @@ def main(top_block_cls=benchmark_copy, options=None):
     parser = ArgumentParser(description='Run a flowgraph iterating over parameters for benchmarking')
     parser.add_argument('--rt_prio', help='enable realtime scheduling', action='store_true')
     parser.add_argument('--samples', type=int, default=1e8)
-    parser.add_argument('--operation', type=str, default='add')
+    parser.add_argument('--operation', type=str, default='fft')
     parser.add_argument('--nblocks', type=int, default=1)
     parser.add_argument('--veclen', type=int, default=1)
+    parser.add_argument('--batch-size', type=int, default=64)
 
     args = parser.parse_args()
     print(args)

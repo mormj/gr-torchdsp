@@ -34,12 +34,14 @@ class benchmark_copy(gr.top_block):
         ##################################################
         op_blocks = []
         for i in range(num_blocks):
-            op_blocks.append(
-                torchdsp.triton_block(f'{args.operation}_{args.device}', args.batch_size, args.addr, [], [])
-            )
+            b = torchdsp.triton_block(f'{args.operation}_{args.device}', args.batch_size, args.addr, [], [])
+            b.set_min_output_buffer(0, args.batch_size*2*args.fft_size)
+            op_blocks.append(b)
+            
 
         src = blocks.null_source(
             gr.sizeof_float*veclen)
+        src.set_min_output_buffer(0, args.batch_size*2*args.fft_size)
         snk = blocks.null_sink(
             gr.sizeof_float*veclen)
         hd = blocks.head(
@@ -55,6 +57,7 @@ class benchmark_copy(gr.top_block):
             else:
                 self.connect(op_blocks[idx-1], (blk, 0))
 
+        if args.operation in ['add']:
             ns = blocks.null_source(gr.sizeof_float*veclen)
             self.connect(ns, (blk, 1))
 
@@ -67,12 +70,13 @@ def main(top_block_cls=benchmark_copy, options=None):
     parser = ArgumentParser(description='Run a flowgraph iterating over parameters for benchmarking')
     parser.add_argument('--rt_prio', help='enable realtime scheduling', action='store_true')
     parser.add_argument('--samples', type=int, default=1e8)
-    parser.add_argument('--operation', type=str, default='add')
+    parser.add_argument('--operation', type=str, default='fft')
     parser.add_argument('--device', type=str, default='cpu_openvino')
     parser.add_argument('--nblocks', type=int, default=1)
     parser.add_argument('--veclen', type=int, default=1)
+    parser.add_argument('--fft_size', type=int, default=512)
     parser.add_argument('--addr', type=str, default='localhost:8000')
-    parser.add_argument('--batch-size', type=int, default=256)
+    parser.add_argument('--batch_size', type=int, default=256)
 
     args = parser.parse_args()
     print(args)

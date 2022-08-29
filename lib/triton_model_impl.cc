@@ -268,6 +268,8 @@ triton_model_impl::io_memory_t triton_model_impl::allocate_shm(
     tc::MapSharedMemory(shm_fd_ip, 0, num_bytes, (void**)&data_ptr);
     tc::CloseSharedMemory(shm_fd_ip);
 
+    std::cout << fmt::format("{}: {}", data_ptr, shm_key) << std::endl;
+
     if (!error.IsOk())
         return io_memory_t{ 0, 0, 0, "", 0 };
 
@@ -385,6 +387,7 @@ void triton_model_impl::infer_batch(
     std::vector<char*> out_buffers,
     size_t batch_size) {
 
+        // batch_size = 256;
     for (uint16_t idx = 0; idx < in_buffers.size(); idx++)
         std::memcpy(
             inputs_[idx].data_ptr,
