@@ -32,16 +32,25 @@ class benchmark_copy(gr.top_block):
         ##################################################
         # Blocks
         ##################################################
+        src = blocks.null_source(
+            gr.sizeof_float*veclen)
+            
         op_blocks = []
         for i in range(num_blocks):
-            b = torchdsp.triton_block(f'{args.operation}_{args.device}', args.batch_size, args.addr, [], [])
-            b.set_min_output_buffer(0, args.batch_size*2*args.fft_size)
+            if args.operation == 'fir_filter_ff':
+                b = torchdsp.triton_fir_filter_ff(f'{args.operation}_{args.device}', args.batch_size, args.addr, args.op_size)
+                b.set_min_output_buffer(0, args.batch_size*(args.op_size-1+8192))
+            else:
+                b = torchdsp.triton_block(f'{args.operation}_{args.device}', args.batch_size, args.addr, [], [])
+                b.set_min_output_buffer(0, args.batch_size*2*args.op_size)
+            
             op_blocks.append(b)
             
 
-        src = blocks.null_source(
-            gr.sizeof_float*veclen)
-        src.set_min_output_buffer(0, args.batch_size*2*args.fft_size)
+        if args.operation == 'fir_filter_ff':
+            src.set_min_output_buffer(0, args.batch_size*(args.op_size-1+8192))
+        else:
+            src.set_min_output_buffer(0, args.batch_size*2*args.op_size)
         snk = blocks.null_sink(
             gr.sizeof_float*veclen)
         hd = blocks.head(
@@ -70,11 +79,11 @@ def main(top_block_cls=benchmark_copy, options=None):
     parser = ArgumentParser(description='Run a flowgraph iterating over parameters for benchmarking')
     parser.add_argument('--rt_prio', help='enable realtime scheduling', action='store_true')
     parser.add_argument('--samples', type=int, default=1e8)
-    parser.add_argument('--operation', type=str, default='fft')
+    parser.add_argument('--operation', type=str, default='fir_filter_ff')
     parser.add_argument('--device', type=str, default='cpu_openvino')
     parser.add_argument('--nblocks', type=int, default=1)
     parser.add_argument('--veclen', type=int, default=1)
-    parser.add_argument('--fft_size', type=int, default=512)
+    parser.add_argument('--op_size', type=int, default=512)
     parser.add_argument('--addr', type=str, default='localhost:8000')
     parser.add_argument('--batch_size', type=int, default=256)
 

@@ -3,7 +3,8 @@ from scipy import signal as sp
 import numpy as np
 import torch
 
-
+NTAPS=16384
+VLEN=32768
 class FIRFilter(nn.Module):
     def __init__(self, taps: torch.tensor):
         super(FIRFilter, self).__init__()
@@ -13,10 +14,10 @@ class FIRFilter(nn.Module):
         return nn.functional.conv1d(iq_data, self.taps)
 
 
-x = torch.randn(1, 1, 1024, requires_grad=False,
+x = torch.randn(1, 1, VLEN+(NTAPS-1), requires_grad=False,
                 dtype=torch.float32)
 
-taps = sp.firwin(64, 1/8., 1/16.0, window="kaiser").astype(np.float32)
+taps = sp.firwin(NTAPS, 1/8., 1/16.0, window="kaiser").astype(np.float32)
 torch_taps = torch.from_numpy(taps)
 torch_taps.requires_grad = False
 model = FIRFilter(torch_taps.reshape(1, 1, -1))

@@ -30,9 +30,10 @@ namespace torchdsp {
 
 triton_fir_filter_ff::sptr triton_fir_filter_ff::make(
     const std::string& model_name,
+    const size_t max_batch_size,
     const std::string& triton_url,
     unsigned int tap_size) {
-    auto model = triton_model::make(model_name, 256, triton_url);
+    auto model = triton_model::make(model_name, max_batch_size, triton_url);
 
     if (model == nullptr)
         throw std::runtime_error("Could not instantiate triton_model");
@@ -53,7 +54,7 @@ triton_fir_filter_ff_impl::triton_fir_filter_ff_impl(
           gr::io_signature::make(1, 1, sizeof(float)),
           1),
       model_(std::move(model)) {
-    set_output_multiple(1024); // hard-coded from config.pbtxt
+    set_output_multiple(32768); // hard-coded from config.pbtxt
     set_history(tap_size);     // should come from exported model's taps in make_model.py
 }
 

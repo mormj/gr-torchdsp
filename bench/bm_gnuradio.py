@@ -12,10 +12,12 @@ from gnuradio import blocks
 import torchdsp
 from gnuradio import gr
 from gnuradio import fft
+from gnuradio import filter
 import sys
 import signal
 from argparse import ArgumentParser
 import time
+import numpy as np
 
 class benchmark_copy(gr.top_block):
 
@@ -44,7 +46,14 @@ class benchmark_copy(gr.top_block):
                     fft.fft_vcc(args.veclen, True, [])
                 )
                 # op_blocks[-1].set_min_output_buffer(2*args.batch_size*args.veclen)
-        
+            elif args.operation == 'fir':
+                op_blocks.append(
+                    filter.fir_filter_fff(1, np.ones((args.op_size,)))
+                )
+            elif args.operation == 'fft_filter':
+                op_blocks.append(
+                    filter.fft_filter_fff(1, np.ones((args.op_size,)))
+                )
         if args.operation == 'fft':
             src = blocks.null_source(
                 gr.sizeof_gr_complex*veclen)
@@ -85,10 +94,11 @@ def main(top_block_cls=benchmark_copy, options=None):
     parser = ArgumentParser(description='Run a flowgraph iterating over parameters for benchmarking')
     parser.add_argument('--rt_prio', help='enable realtime scheduling', action='store_true')
     parser.add_argument('--samples', type=int, default=1e8)
-    parser.add_argument('--operation', type=str, default='fft')
+    parser.add_argument('--operation', type=str, default='fir')
     parser.add_argument('--nblocks', type=int, default=1)
     parser.add_argument('--veclen', type=int, default=1)
-    parser.add_argument('--batch-size', type=int, default=64)
+    parser.add_argument('--batch_size', type=int, default=64)
+    parser.add_argument('--op_size', type=int, default=1024)
 
     args = parser.parse_args()
     print(args)
