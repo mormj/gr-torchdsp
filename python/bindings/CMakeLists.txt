@@ -31,6 +31,8 @@ list(APPEND torchdsp_python_files
     triton_block_python.cc
     triton_model_python.cc 
     triton_fir_filter_ff_python.cc
+    phased_array_python.cc
+    quantize_python.cc
     python_bindings.cc)
 
 GR_PYBIND_MAKE_OOT(torchdsp

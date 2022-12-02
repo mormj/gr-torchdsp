@@ -1,0 +1,30 @@
+id: torchdsp_phased_array
+label: phased array
+category: '[torchdsp]'
+templates:
+  imports: import torchdsp
+  make: torchdsp.phased_array(${num_elements}, ${sep_lambda}, ${angle_degrees}, ${scale_db})
+parameters:
+- id: num_elements
+  label: Num_elements
+  dtype: int
+- id: sep_lambda
+  label: Sep_lambda
+  dtype: float
+- id: angle_degrees
+  label: Angle_degrees
+  dtype: float
+- id: scale_db
+  label: Scale_db
+  dtype: float
+inputs:
+- label: in
+  domain: stream
+  dtype: complex
+outputs:
+- label: out
+  domain: stream
+  dtype: complex
+  # vlen: ${ num_elements }
+  multiplicity: ${num_elements}
+file_format: 1

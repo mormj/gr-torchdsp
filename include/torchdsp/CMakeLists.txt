@@ -13,5 +13,7 @@ install(FILES
     api.h
     triton_block.h
     triton_model.h
+    phased_array.h
+    quantize.h
     triton_fir_filter_ff.h DESTINATION include/torchdsp
 )

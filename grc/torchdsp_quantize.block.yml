@@ -1,0 +1,19 @@
+id: torchdsp_quantize
+label: quantize
+category: '[torchdsp]'
+templates:
+  imports: import torchdsp
+  make: torchdsp.quantize(${nbits})
+parameters:
+- id: nbits
+  label: Nbits
+  dtype: int
+inputs:
+- label: in
+  domain: stream
+  dtype: complex
+outputs:
+- label: out
+  domain: stream
+  dtype: complex
+file_format: 1
