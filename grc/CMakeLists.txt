@@ -10,6 +10,7 @@ install(FILES
     torchdsp_triton_block.block.yml
     torchdsp_triton_fir_filter_ff.block.yml
     torchdsp_triton_beamform_cc.block.yml
+    torchdsp_triton_copy.block.yml
     torchdsp_phased_array.block.yml
     torchdsp_quantize.block.yml DESTINATION share/gnuradio/grc/blocks
 )

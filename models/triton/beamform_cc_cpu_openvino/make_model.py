@@ -27,7 +27,9 @@ class Beamform(nn.Module):
             torch.matmul(bf_imag, in_imag)
         out_imag = torch.matmul(bf_imag, in_real) + \
             torch.matmul(bf_real, in_imag)
-        result = torch.cat([out_real, out_imag], dim=0)
+
+        #result = torch.cat([out_real, out_imag], dim=0)
+        result = torch.cat([in_real, in_imag], dim=0)
 
         # in_matrix = torch.cat((in0, in1, in2, in3), dim=0).reshape(-1, 4, 1000)
         # out = torch.matmul(self.bf, in_matrix)
