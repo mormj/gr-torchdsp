@@ -7,7 +7,7 @@ class Beamform(nn.Module):
     def __init__(self):
         super(Beamform, self).__init__()
         self.bf = torch.ones((1, 8), dtype=torch.float32)
-        # self.bf[1::2] = 0.0
+        self.bf[-1,1::2] = 0.0
 
     def forward(
         self,
@@ -28,12 +28,18 @@ class Beamform(nn.Module):
         out_imag = torch.matmul(bf_imag, in_real) + \
             torch.matmul(bf_real, in_imag)
 
-        #result = torch.cat([out_real, out_imag], dim=0)
-        result = torch.cat([in_real, in_imag], dim=0)
+        result = torch.cat([out_real, out_imag], dim=2)
+        # result = torch.cat([in_real, in_imag], dim=0)
+        result2 = torch.zeros_like(result)
+        result2[:,::2] = result[:,:1000]
+        result2[:,1::2] = result[:,1000:]
+        # result = torch.stack((out_real,out_imag)).T.reshape(1,-1)
+        # result = torch.cat([in_real, in_imag], dim=0)
 
         # in_matrix = torch.cat((in0, in1, in2, in3), dim=0).reshape(-1, 4, 1000)
         # out = torch.matmul(self.bf, in_matrix)
         # result = torch.cat([out.real, out.imag], dim=0)
+        # result2 = in0
         return result
 
 

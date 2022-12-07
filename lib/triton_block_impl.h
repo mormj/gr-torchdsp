@@ -24,6 +24,9 @@ class triton_block_impl : public triton_block
 private:
     std::unique_ptr<triton_model> model_;
 
+    size_t _single_item_size;
+    size_t _items_per_inference;
+
 public:
     triton_block_impl(
         std::unique_ptr<triton_model>& model,

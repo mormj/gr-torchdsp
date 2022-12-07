@@ -49,8 +49,10 @@ triton_block_impl::triton_block_impl(
       model_(std::move(model)) // this is invoked after calling sync_block constructor.
 {
 
-    set_output_multiple(
-        model_.get()->get_output_sizes()[0] / model_.get()->get_output_signature()[0]);
+    _items_per_inference = model_.get()->get_output_sizes()[0];
+    _single_item_size = output_sizes[0]; //model_.get()->get_output_signature()[0];
+
+    set_output_multiple(_items_per_inference / _single_item_size);
 
     std::cout << "Instantiated block" << std::endl;
 }
@@ -74,8 +76,7 @@ int triton_block_impl::work(
         out_ptrs.push_back(static_cast<char*>(item));
 
     // num_items_per_patch is fixed.
-    auto num_items_per_batch =
-        model_.get()->get_output_sizes()[0] / model_.get()->get_output_signature()[0];
+    auto num_items_per_batch = _items_per_inference / _single_item_size;
     auto batch_size = noutput_items / num_items_per_batch;
 
     model_->infer_batch(in_ptrs, out_ptrs, batch_size);
@@ -83,8 +84,8 @@ int triton_block_impl::work(
 
     std::cout << fmt::format("noutput_items: {}, batch_size: {}, num_items_per_batch: {}",
     noutput_items, batch_size, num_items_per_batch) << std::endl;;
-    // auto in = static_cast<const gr_complex*>(input_items[0]);
-    // auto out = static_cast<gr_complex*>(output_items[0]);
+    auto in0 = static_cast<const gr_complex*>(input_items[0]);
+    auto out = static_cast<gr_complex*>(output_items[0]);
     // for (int i=0; i< noutput_items; i++) {
     //     out[i] = in[i];
     // }
