@@ -705,7 +705,7 @@ blocks:
     color9: '"red"'
     comment: ''
     grid: 'False'
-    gui_hint: ''
+    gui_hint: 1,1,1,1
     label1: ''
     label10: ''
     label2: ''
@@ -803,7 +803,7 @@ blocks:
     fftsize: '1024'
     freqhalf: 'True'
     grid: 'False'
-    gui_hint: ''
+    gui_hint: 1,0,1,1
     label: Relative Gain
     label1: ''
     label10: ''''''
@@ -977,7 +977,7 @@ blocks:
     ctrlpanel: 'False'
     entags: 'True'
     grid: 'False'
-    gui_hint: ''
+    gui_hint: 2,0,1,1
     label1: Signal 1
     label10: Signal 10
     label2: Signal 2
@@ -1074,7 +1074,7 @@ blocks:
     ctrlpanel: 'False'
     entags: 'True'
     grid: 'False'
-    gui_hint: ''
+    gui_hint: 2,1,1,1
     label1: Signal 1
     label10: Signal 10
     label2: Signal 2
