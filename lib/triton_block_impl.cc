@@ -82,10 +82,10 @@ int triton_block_impl::work(
     model_->infer_batch(in_ptrs, out_ptrs, batch_size);
 
 
-    std::cout << fmt::format("noutput_items: {}, batch_size: {}, num_items_per_batch: {}",
-    noutput_items, batch_size, num_items_per_batch) << std::endl;;
-    auto in0 = static_cast<const gr_complex*>(input_items[0]);
-    auto out = static_cast<gr_complex*>(output_items[0]);
+    // std::cout << fmt::format("noutput_items: {}, batch_size: {}, num_items_per_batch: {}",
+    // noutput_items, batch_size, num_items_per_batch) << std::endl;;
+    // auto in0 = static_cast<const gr_complex*>(input_items[0]);
+    // auto out = static_cast<gr_complex*>(output_items[0]);
     // for (int i=0; i< noutput_items; i++) {
     //     out[i] = in[i];
     // }

@@ -145,7 +145,7 @@ blocks:
     maxoutbuf: '0'
     minoutbuf: '0'
     nthreads: '1'
-    shift: 'False'
+    shift: 'True'
     type: complex
     window: ()
   states:

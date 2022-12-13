@@ -1,0 +1,36 @@
+name: "ofdm_divide_64_128_cpu_openvino"
+backend: "pytorch"
+max_batch_size: 256
+input [
+  {
+    name: "input__0"
+    data_type: TYPE_FP32
+    dims: [1, 128]
+  },
+  {
+    name: "input__1"
+    data_type: TYPE_FP32
+    dims: [1, 128]
+  }
+]
+output [
+  {
+    name: "output__0"
+    data_type: TYPE_FP32
+    dims: [1, 256 ]
+  }
+]
+
+dynamic_batching {}
+
+instance_group [
+	{
+		count: 1
+		kind: KIND_CPU
+	}
+]
+optimization { execution_accelerators {
+  cpu_execution_accelerator : [ {
+    name : "openvino"
+  }]
+}}

@@ -12,12 +12,8 @@ class FFT(nn.Module):
         
         iq = torch.complex(float_data[:,:,::2], float_data[:,:,1::2])
         
-        result = torch.roll( torch.fft.fft(
-            iq, dim=2, norm="backward"),
-            FFT_SIZE // 2, dims=2
-        )
-        # result = torch.fft.fft(
-        #     iq, dim=2, norm="backward")
+        result = torch.fft.fft(
+            iq, dim=2, norm="backward")
         # We do this because TIS doesn't like complex outputs sometimes
         # result = torch.cat([result.real, result.imag], dim=1)
         # return result.permute((0, 2, 1))
