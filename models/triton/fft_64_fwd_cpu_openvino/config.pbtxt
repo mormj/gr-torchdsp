@@ -5,14 +5,14 @@ input [
   {
     name: "input__0"
     data_type: TYPE_FP32
-    dims: [ 1, 128 ]
+    dims: [1, 128]
   }
 ]
 output [
   {
     name: "output__0"
     data_type: TYPE_FP32
-    dims: [ 128, 1 ]
+    dims: [1, 128 ]
   }
 ]
 

@@ -9,13 +9,20 @@ class FFT(nn.Module):
         super(FFT, self).__init__()
 
     def forward(self, iq_data):
-        result = torch.roll(torch.fft.fft(
-            iq_data, dim=2, norm="ortho"),
-            FFT_SIZE // 2
-        )
+        # result = torch.roll(torch.fft.fft(
+        #     iq_data, dim=2, norm="ortho"),
+        #     FFT_SIZE // 2
+        # )
+        iq = iq_data.view(dtype=torch.cfloat)
+
+        
+        result =torch.fft.fft(
+            iq_data, dim=2, norm="backward")
         # We do this because TIS doesn't like complex outputs sometimes
         result = torch.cat([result.real, result.imag], dim=1)
         return result.permute((0, 2, 1))
+
+        # return result
 
 
 x = torch.randn(1, 1, FFT_SIZE, requires_grad=False,
