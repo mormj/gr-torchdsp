@@ -4,7 +4,7 @@ category: '[torchdsp]'
 
 templates:
   imports: import torchdsp
-  make: torchdsp.triton_block("${"fft_128_fwd_noshift_cpu_openvino" if device == 'cpu' else "fft_gpu"}", ${max_batch_size}, ${triton_url}, [8], [8])
+  make: torchdsp.triton_block("${"fft_128_fwd_noshift_cpu_openvino" if device == 'cpu' else "fft_gpu"}", ${max_batch_size}, ${triton_url}, [8*128], [8*128])
 
 parameters:
 - id: triton_url
@@ -25,10 +25,12 @@ inputs:
 - label: in
   domain: stream
   dtype: complex
+  vlen: 128
 
 outputs:
 - label: out
   domain: stream
   dtype: complex
+  vlen: 128
 
 file_format: 1

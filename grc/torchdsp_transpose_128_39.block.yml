@@ -1,10 +1,10 @@
-id: torchdsp_triton_fft_64_fwd
-label: Triton FFT 64 FWD
+id: torchdsp_triton_transpose_128_39
+label: Triton Transpose 128x39
 category: '[torchdsp]'
 
 templates:
   imports: import torchdsp
-  make: torchdsp.triton_block("${"fft_64_fwd_cpu_openvino" if device == 'cpu' else "fft_gpu"}", ${max_batch_size}, ${triton_url}, [8*64], [8*64])
+  make: torchdsp.triton_block("${"transpose_128_39_cpu_openvino" if device == 'cpu' else "fft_gpu"}", ${max_batch_size}, ${triton_url}, [8*128*39], [8*39*128])
 
 parameters:
 - id: triton_url
@@ -19,18 +19,18 @@ parameters:
 - id: max_batch_size
   label: "Max Batch Size"
   dtype: int
-  default: 256
+  default: 2
 
 inputs:
 - label: in
   domain: stream
   dtype: complex
-  vlen: 64
+  vlen: 4992
 
 outputs:
 - label: out
   domain: stream
   dtype: complex
-  vlen: 64
+  vlen: 4992
 
 file_format: 1

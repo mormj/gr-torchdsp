@@ -1,19 +1,21 @@
 from torch import nn
 import torch
 
-FFT_SIZE = 64
+IN_SIZE = 128
+OUT_SIZE = 39
 
 
-class FFT(nn.Module):
+class Transpose(nn.Module):
     def __init__(self):
-        super(FFT, self).__init__()
+        super(Transpose, self).__init__()
 
     def forward(self, float_data):
         
         iq = torch.complex(float_data[:,:,::2], float_data[:,:,1::2])
         
-        result = torch.fft.ifft(
-            iq, dim=2, norm="backward")
+        result = iq.view((iq.shape[0], iq.shape[1], OUT_SIZE, IN_SIZE)).permute((0,1,3,2)).flatten(start_dim=2)
+
+
         # We do this because TIS doesn't like complex outputs sometimes
         # result = torch.cat([result.real, result.imag], dim=1)
         # return result.permute((0, 2, 1))
@@ -27,11 +29,11 @@ class FFT(nn.Module):
         return x
 
 
-x = torch.randn(1, 1, FFT_SIZE * 2, requires_grad=False,
+x = torch.randn(1, 1, IN_SIZE*OUT_SIZE * 2, requires_grad=False,
                 dtype=torch.float32)
 
 
-model = FFT()
+model = Transpose()
 model.eval()
 
 print(x.shape, model(x).shape)

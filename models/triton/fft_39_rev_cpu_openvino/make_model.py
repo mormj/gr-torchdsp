@@ -1,7 +1,7 @@
 from torch import nn
 import torch
 
-FFT_SIZE = 64
+FFT_SIZE = 39
 
 
 class FFT(nn.Module):
