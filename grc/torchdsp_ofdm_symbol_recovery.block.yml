@@ -1,0 +1,36 @@
+id: torchdsp_triton_ofdm_symbol_recovery
+label: Triton OFDM Symbol Recovery
+category: '[torchdsp]'
+
+templates:
+  imports: import torchdsp
+  make: torchdsp.triton_block("${"ofdm_symbol_recovery_cpu_openvino" if device == 'cpu' else "fft_gpu"}", ${max_batch_size}, ${triton_url}, [8*1280], [8*824])
+
+parameters:
+- id: triton_url
+  label: "Triton URL"
+  dtype: string
+  default: "localhost:8000"
+- id: device
+  label: "Device"
+  dtype: enum
+  options: [cpu, gpu]
+  default: 'cpu'
+- id: max_batch_size
+  label: "Max Batch Size"
+  dtype: int
+  default: 256
+
+inputs:
+- label: in
+  domain: stream
+  dtype: complex
+  vlen: 1280
+
+outputs:
+- label: out
+  domain: stream
+  dtype: complex
+  vlen: 824
+
+file_format: 1
