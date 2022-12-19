@@ -26,6 +26,7 @@ void bind_triton_model(py::module& m);
 void bind_triton_fir_filter_ff(py::module& m);
 void bind_phased_array(py::module& m);
 void bind_quantize(py::module& m);
+    void bind_triton_moving_average_cc(py::module& m);
 // ) END BINDING_FUNCTION_PROTOTYPES
 
 
@@ -57,5 +58,6 @@ PYBIND11_MODULE(torchdsp_python, m) {
     bind_triton_fir_filter_ff(m);
     bind_phased_array(m);
     bind_quantize(m);
+    bind_triton_moving_average_cc(m);
     // ) END BINDING_FUNCTION_CALLS
 }

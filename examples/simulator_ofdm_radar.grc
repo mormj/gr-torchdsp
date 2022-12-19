@@ -426,7 +426,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [907, 720]
+    coordinate: [832, 724.0]
     rotation: 0
     state: enabled
 - name: blocks_complex_to_mag_squared_1_0

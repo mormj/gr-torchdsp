@@ -1,0 +1,35 @@
+id: torchdsp_triton_multiply_conj
+label: Triton Multiply Conj
+category: '[torchdsp]'
+
+templates:
+  imports: import torchdsp
+  make: torchdsp.triton_block("${"multiply_conj_cpu_openvino" if device == 'cpu' else "fft_gpu"}", ${max_batch_size}, ${triton_url}, [8, 8], [8])
+
+parameters:
+- id: triton_url
+  label: "Triton URL"
+  dtype: string
+  default: "localhost:8000"
+- id: device
+  label: "Device"
+  dtype: enum
+  options: [cpu, gpu]
+  default: 'cpu'
+- id: max_batch_size
+  label: "Max Batch Size"
+  dtype: int
+  default: 256
+
+inputs:
+- label: in
+  domain: stream
+  dtype: complex
+  multiplicity: 2
+
+outputs:
+- label: out
+  domain: stream
+  dtype: complex
+
+file_format: 1

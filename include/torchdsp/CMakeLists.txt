@@ -15,5 +15,6 @@ install(FILES
     triton_model.h
     phased_array.h
     quantize.h
-    triton_fir_filter_ff.h DESTINATION include/torchdsp
+    triton_fir_filter_ff.h
+    triton_moving_average_cc.h DESTINATION include/torchdsp
 )

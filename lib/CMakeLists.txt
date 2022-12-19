@@ -17,6 +17,7 @@ list(APPEND torchdsp_sources
     triton_block_impl.cc
     phased_array_impl.cc
     quantize_impl.cc
+    triton_moving_average_cc_impl.cc
 )
 
 set(torchdsp_sources "${torchdsp_sources}" PARENT_SCOPE)
