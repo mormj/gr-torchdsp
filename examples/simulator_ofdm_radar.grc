@@ -426,9 +426,9 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [832, 724.0]
+    coordinate: [872, 660.0]
     rotation: 0
-    state: enabled
+    state: disabled
 - name: blocks_complex_to_mag_squared_1_0
   id: blocks_complex_to_mag_squared
   parameters:
@@ -476,9 +476,9 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1139, 712]
+    coordinate: [1144, 644.0]
     rotation: 0
-    state: enabled
+    state: disabled
 - name: blocks_nlog10_ff_1_0
   id: blocks_nlog10_ff
   parameters:
@@ -1618,6 +1618,24 @@ blocks:
     coordinate: [464, 708.0]
     rotation: 0
     state: disabled
+- name: torchdsp_triton_complex_to_mag_sq_0
+  id: torchdsp_triton_complex_to_mag_sq
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    device: cpu
+    max_batch_size: '256'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    triton_url: localhost:8000
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [872, 732.0]
+    rotation: 0
+    state: true
 - name: torchdsp_triton_fft_128_fwd_noshift_0
   id: torchdsp_triton_fft_128_fwd_noshift
   parameters:
@@ -1726,6 +1744,24 @@ blocks:
     coordinate: [2400, 388.0]
     rotation: 0
     state: disabled
+- name: torchdsp_triton_log10_0
+  id: torchdsp_triton_log10
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    device: cpu
+    max_batch_size: '256'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    triton_url: localhost:8000
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1152, 732.0]
+    rotation: 0
+    state: true
 - name: torchdsp_triton_ofdm_divide_64_128_0
   id: torchdsp_triton_ofdm_divide_64_128
   parameters:
@@ -1872,6 +1908,7 @@ connections:
 - [blocks_vector_to_stream_2, '0', blocks_complex_to_mag_1, '0']
 - [blocks_vector_to_stream_3, '0', torchdsp_triton_fft_39_rev_0_0, '0']
 - [blocks_vector_to_stream_3_0, '0', blocks_complex_to_mag_squared_0, '0']
+- [blocks_vector_to_stream_3_0, '0', torchdsp_triton_complex_to_mag_sq_0, '0']
 - [digital_chunks_to_symbols_xx_0_0, '0', digital_ofdm_carrier_allocator_cvc_0, '0']
 - [digital_ofdm_carrier_allocator_cvc_0, '0', blocks_vector_to_stream_0_0_0, '0']
 - [digital_ofdm_carrier_allocator_cvc_0, '0', fft_vxx_0, '0']
@@ -1897,6 +1934,8 @@ connections:
 - [radar_transpose_matrix_vcvc_0_0, '0', blocks_complex_to_mag_squared_0, '0']
 - [radar_transpose_matrix_vcvc_0_0, '0', blocks_tag_debug_0, '0']
 - [radar_transpose_matrix_vcvc_0_0, '0', radar_os_cfar_2d_vc_0, '0']
+- [torchdsp_triton_complex_to_mag_sq_0, '0', blocks_nlog10_ff_0, '0']
+- [torchdsp_triton_complex_to_mag_sq_0, '0', torchdsp_triton_log10_0, '0']
 - [torchdsp_triton_fft_128_fwd_noshift_0, '0', blocks_stream_to_vector_0_0_0, '0']
 - [torchdsp_triton_fft_128_fwd_noshift_0, '0', torchdsp_triton_transpose_128_39_0,
   '0']
@@ -1908,6 +1947,8 @@ connections:
 - [torchdsp_triton_fft_64_fwd_0, '0', torchdsp_triton_ofdm_divide_64_128_0_0, '1']
 - [torchdsp_triton_fft_64_fwd_0_0, '0', blocks_complex_to_mag_squared_1_0, '0']
 - [torchdsp_triton_fft_64_fwd_0_0, '0', torchdsp_triton_ofdm_divide_64_128_0, '1']
+- [torchdsp_triton_log10_0, '0', blocks_vector_to_stream_0, '0']
+- [torchdsp_triton_log10_0, '0', radar_qtgui_spectrogram_plot_0, '0']
 - [torchdsp_triton_ofdm_divide_64_128_0, '0', blocks_vector_to_stream_1_0, '0']
 - [torchdsp_triton_ofdm_divide_64_128_0, '0', torchdsp_triton_fft_128_fwd_noshift_0,
   '0']

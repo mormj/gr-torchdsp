@@ -7,6 +7,8 @@
 #
 install(FILES
     torchdsp_complex_to_mag.block.yml
+    torchdsp_complex_to_mag_sq.block.yml
+    torchdsp_log10.block.yml
     torchdsp_fft_cc.block.yml
     torchdsp_fft_64_fwd_cc.block.yml
     torchdsp_fft_39_rev_cc.block.yml
