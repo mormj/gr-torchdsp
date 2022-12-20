@@ -68,13 +68,15 @@ int triton_block_impl::work(
     gr_vector_const_void_star& input_items,
     gr_vector_void_star& output_items) {
 
-    std::vector<const char*> in_ptrs;
+    std::vector<const char*> in_ptrs(input_items.size());
+    int idx = 0;
     for (const auto& item : input_items)
-        in_ptrs.push_back(static_cast<const char*>(item));
+        in_ptrs[idx++] = static_cast<const char*>(item);
 
-    std::vector<char*> out_ptrs;
+    std::vector<char*> out_ptrs(output_items.size());
+    idx = 0;
     for (const auto& item : output_items)
-        out_ptrs.push_back(static_cast<char*>(item));
+        out_ptrs[idx++] = static_cast<char*>(item);
 
     // num_items_per_patch is fixed.
     auto num_items_per_batch = _items_per_inference / _single_item_size;
