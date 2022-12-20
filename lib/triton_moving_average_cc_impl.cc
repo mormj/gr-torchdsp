@@ -53,15 +53,33 @@ int triton_moving_average_cc_impl::work(
     gr_vector_const_void_star& input_items,
     gr_vector_void_star& output_items) {
 
-    std::vector<const char*> in_ptrs;
-    in_ptrs.push_back(static_cast<const char*>(input_items[0]));
+    std::vector<const char*> in_ptrs(1);
+    std::vector<char*> out_ptrs(1);
 
-    std::vector<char*> out_ptrs;
-    out_ptrs.push_back(static_cast<char*>(output_items[0]));
 
-    // num_items_per_patch is fixed.
+    // we can't do infer_batch here because the reduction in 
+    // output size due to the 'valid' conv_1d is based on history
+    // not applied per batch
+    // said differently, the input ptr doesn't jump by the input
+    // size between batches
+    // for now, just do a bunch of infers in a for loop
+
     auto batch_size = noutput_items / this->output_multiple();
-    model_->infer_batch(in_ptrs, out_ptrs, batch_size);
+
+    for (int i=0; i<batch_size; i++) {
+
+        auto in = static_cast<const gr_complex *>(input_items[0]) + i*output_multiple();
+        auto out = static_cast<gr_complex *>(output_items[0]) + i*output_multiple();
+
+        std::vector<const char*> in_ptrs(1);
+        in_ptrs[0] = reinterpret_cast<const char*>(in);
+
+        std::vector<char*> out_ptrs(1);
+        out_ptrs[0] = reinterpret_cast<char*>(out);
+
+        model_->infer(in_ptrs, out_ptrs);
+    }
+    
 
     // Tell runtime system how many output items we produced.
     return noutput_items;

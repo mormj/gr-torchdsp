@@ -300,7 +300,7 @@ blocks:
     bus_structure: null
     coordinate: [960, 688.0]
     rotation: 180
-    state: enabled
+    state: disabled
 - name: blocks_moving_average_xx_0
   id: blocks_moving_average_xx
   parameters:
@@ -320,7 +320,7 @@ blocks:
     bus_structure: null
     coordinate: [856, 412.0]
     rotation: 0
-    state: enabled
+    state: disabled
 - name: blocks_multiply_conjugate_cc_0
   id: blocks_multiply_conjugate_cc
   parameters:
@@ -538,7 +538,7 @@ blocks:
     bus_structure: null
     coordinate: [1144, 752.0]
     rotation: 180
-    state: disabled
+    state: enabled
 - name: epy_block_1
   id: epy_block
   parameters:
@@ -1216,7 +1216,7 @@ blocks:
     bus_structure: null
     coordinate: [848, 316.0]
     rotation: 0
-    state: disabled
+    state: enabled
 - name: torchdsp_triton_multiply_conj_0
   id: torchdsp_triton_multiply_conj
   parameters:
@@ -1319,7 +1319,6 @@ blocks:
 connections:
 - [analog_fastnoise_source_x_0, '0', blocks_add_xx_0, '0']
 - [analog_random_source_x_0_1, '0', digital_constellation_encoder_bc_1_1, '0']
-- [blocks_add_xx_0, '0', blocks_delay_1, '0']
 - [blocks_add_xx_0, '0', qtgui_freq_sink_x_0, '0']
 - [blocks_add_xx_0, '0', tx_out, '0']
 - [blocks_char_to_float_0, '0', qtgui_time_sink_x_0_0, '1']
@@ -1363,6 +1362,7 @@ connections:
 - [torchdsp_triton_qpsk_decoder_0, '0', torchdsp_triton_unpack_2_bits_0, '0']
 - [torchdsp_triton_unpack_2_bits_0, '0', blocks_vector_to_stream_0, '0']
 - [virtual_source_0, '0', blocks_delay_0, '0']
+- [virtual_source_0, '0', blocks_delay_1, '0']
 - [virtual_source_0, '0', blocks_multiply_conjugate_cc_0, '0']
 - [virtual_source_0, '0', epy_block_0, '0']
 - [virtual_source_0, '0', torchdsp_triton_multiply_conj_0, '0']
