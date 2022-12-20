@@ -5,20 +5,20 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#ifndef INCLUDED_TORCHDSP_TRITON_MODEL_IMPL_H
-#define INCLUDED_TORCHDSP_TRITON_MODEL_IMPL_H
+#ifndef INCLUDED_TORCHDSP_triton_model_H
+#define INCLUDED_TORCHDSP_triton_model_H
 
 #include "shm_utils.h"
 #include <http_client.h>
 #include <rapidjson/document.h>
-#include <torchdsp/triton_model.h>
+#include "triton_model.h"
 
 namespace tc = triton::client;
 
 namespace gr {
 namespace torchdsp {
 
-class triton_model_impl : public triton_model
+class triton_model
 {
 public:
     typedef struct io_metadata_s {
@@ -49,16 +49,12 @@ private:
     size_t max_batch_size_;
 
 public:
-    triton_model_impl(
+    triton_model(
         const std::string& model_name,
         const size_t max_batch_size,
         const std::string& triton_url);
 
-    // We override these to prevent memory leaks.
-    triton_model_impl(triton_model_impl&& other);
-    triton_model_impl& operator=(triton_model_impl&& other);
-
-    ~triton_model_impl() override;
+    ~triton_model();
 
     // Interface to GNU Radio Block
     int get_num_inputs() { return inputs_.size(); };
@@ -136,4 +132,4 @@ public:
 
 } // namespace torchdsp
 } // namespace gr
-#endif /* INCLUDED_TORCHDSP_TRITON_MODEL_IMPL_H */
+#endif /* INCLUDED_TORCHDSP_triton_model_H */

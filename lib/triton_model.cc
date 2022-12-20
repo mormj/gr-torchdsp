@@ -5,76 +5,10 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#include "triton_model_impl.h"
+#include "triton_model.h"
 
 namespace gr {
 namespace torchdsp {
-
-/**
- * @brief
- *
- * @param model_name
- * @param triton_url
- * @return triton_model::sptr
- */
-triton_model::sptr triton_model::make(
-    const std::string& model_name,
-    const size_t max_batch_size,
-    const std::string& triton_url) {
-    auto model =
-        std::make_unique<triton_model_impl>(model_name, max_batch_size, triton_url);
-
-    if (model.get()->get_num_inputs() == 0) {
-        model.reset();
-        return nullptr;
-    }
-
-    return model;
-}
-
-/**
- * @brief Move constructor. We use this to prevent memory leaks.
- *
- * @param other
- */
-triton_model_impl::triton_model_impl(triton_model_impl&& other)
-    : client_(std::move(other.client_)), options_(other.model_name_) {
-
-    for (const auto& input_ptr : other.input_ptrs_)
-        input_ptrs_.push_back(std::move(input_ptr));
-
-    for (const auto& output_ptr : other.output_ptrs_)
-        output_ptrs_.push_back(std::move(output_ptr));
-
-    model_name_ = other.model_name_;
-    inputs_ = other.inputs_;
-    outputs_ = other.outputs_;
-    results_ = other.results_;
-}
-
-/**
- * @brief Move assignment operator. We use this to prevent memory leaks.
- *
- * @param other
- * @return triton_model_impl&
- */
-triton_model_impl& triton_model_impl::operator=(triton_model_impl&& other) {
-    client_ = std::move(other.client_);
-    options_.model_name_ = other.model_name_;
-
-    std::cout << "Move constructor called" << std::endl;
-    for (const auto& input_ptr : other.input_ptrs_)
-        input_ptrs_.push_back(std::move(input_ptr));
-
-    for (const auto& output_ptr : other.output_ptrs_)
-        output_ptrs_.push_back(std::move(output_ptr));
-
-    model_name_ = other.model_name_;
-    inputs_ = other.inputs_;
-    outputs_ = other.outputs_;
-    results_ = other.results_;
-    return *this;
-}
 
 /**
  * @brief Construct a new triton model impl::triton model impl object
@@ -82,21 +16,21 @@ triton_model_impl& triton_model_impl::operator=(triton_model_impl&& other) {
  * @param model_name model name available in TIS model repo
  * @param triton_url Non-protocol prefixed URL to running TIS instance
  */
-triton_model_impl::triton_model_impl(
+triton_model::triton_model(
     const std::string& model_name,
     const size_t max_batch_size,
     const std::string& triton_url)
     : model_name_(model_name), max_batch_size_(max_batch_size), options_(model_name) {
     tc::Error err = tc::InferenceServerHttpClient::Create(&client_, triton_url, false);
 
-    if (!triton_model_impl::is_server_healthy(client_)) {
+    if (!triton_model::is_server_healthy(client_)) {
         std::cerr << "Failed to connect to TIS instance at " << triton_url << std::endl;
         return;
     }
 
     std::cout << "Server at " << triton_url << " determined to be healthy." << std::endl;
 
-    auto model_metadata = triton_model_impl::get_model_metadata(client_, model_name);
+    auto model_metadata = triton_model::get_model_metadata(client_, model_name);
     std::cout << "Got model metadata for model " << model_name << std::endl;
 
     // Configure Inputs
@@ -147,7 +81,7 @@ triton_model_impl::triton_model_impl(
  * @brief Destroy the triton model impl::triton model impl object
  *
  */
-triton_model_impl::~triton_model_impl() {
+triton_model::~triton_model() {
     int idx = 0;
     for (const auto& input : inputs_) {
         client_->UnregisterSystemSharedMemory(registered_input_names_[idx]);
@@ -174,7 +108,7 @@ triton_model_impl::~triton_model_impl() {
  * @return true server is ready and live
  * @return false server ain't ready or ain't live
  */
-bool triton_model_impl::is_server_healthy(
+bool triton_model::is_server_healthy(
     const std::unique_ptr<tc::InferenceServerHttpClient>& client) {
     bool is_live;
     tc::Error err = client->IsServerLive(&is_live);
@@ -199,7 +133,7 @@ bool triton_model_impl::is_server_healthy(
  * @param shape
  * @return int64_t
  */
-int64_t triton_model_impl::num_elements(const std::vector<int64_t>& shape) {
+int64_t triton_model::num_elements(const std::vector<int64_t>& shape) {
     int64_t num_elements = 1;
     for (const int64_t& dim_size : shape)
         num_elements *= dim_size;
@@ -213,7 +147,7 @@ int64_t triton_model_impl::num_elements(const std::vector<int64_t>& shape) {
  * @param data_type
  * @return int64_t
  */
-int64_t triton_model_impl::itemsize(const std::string& data_type) {
+int64_t triton_model::itemsize(const std::string& data_type) {
     if (std ::string("FP32").compare(data_type) == 0)
         return 4;
     if (std ::string("FLOAT32").compare(data_type) == 0)
@@ -235,7 +169,7 @@ int64_t triton_model_impl::itemsize(const std::string& data_type) {
  * @param model_name
  * @return rapidjson::Document
  */
-rapidjson::Document triton_model_impl::get_model_metadata(
+rapidjson::Document triton_model::get_model_metadata(
     const std::unique_ptr<tc::InferenceServerHttpClient>& client,
     const std::string& model_name) {
     std::string model_metadata;
@@ -249,9 +183,9 @@ rapidjson::Document triton_model_impl::get_model_metadata(
  * @brief
  *
  * @param io_meta
- * @return triton_model_impl::io_memory_t
+ * @return triton_model::io_memory_t
  */
-triton_model_impl::io_memory_t triton_model_impl::allocate_shm(
+triton_model::io_memory_t triton_model::allocate_shm(
     const io_metadata_t& io_meta,
     const size_t max_batch_size) {
 
@@ -288,7 +222,7 @@ triton_model_impl::io_memory_t triton_model_impl::allocate_shm(
  * @param io_meta
  * @param io_mem
  */
-void triton_model_impl::create_triton_input(
+void triton_model::create_triton_input(
     const std::unique_ptr<tc::InferenceServerHttpClient>& client,
     const io_metadata_t& io_meta,
     const io_memory_t& io_mem) {
@@ -323,7 +257,7 @@ void triton_model_impl::create_triton_input(
  * @param io_meta
  * @param io_mem
  */
-void triton_model_impl::create_triton_output(
+void triton_model::create_triton_output(
     const std::unique_ptr<tc::InferenceServerHttpClient>& client,
     const io_metadata_t& io_meta,
     const io_memory_t& io_mem) {
@@ -354,7 +288,7 @@ void triton_model_impl::create_triton_output(
     output_number += 1;
 }
 
-void triton_model_impl::infer(
+void triton_model::infer(
     std::vector<const char*> in_buffers,
     std::vector<char*> out_buffers) {
 
@@ -383,7 +317,7 @@ void triton_model_impl::infer(
             out_buffers[idx], outputs_[idx].data_ptr, outputs_[idx].element_byte_size);
 }
 
-void triton_model_impl::infer_batch(
+void triton_model::infer_batch(
     std::vector<const char*> in_buffers,
     std::vector<char*> out_buffers,
     size_t batch_size) {

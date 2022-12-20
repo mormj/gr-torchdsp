@@ -13,7 +13,7 @@ include(GrPlatform) # define LIB_SUFFIX
 list(APPEND torchdsp_sources
     shm_utils.cc
     triton_fir_filter_ff_impl.cc
-    triton_model_impl.cc
+    triton_model.cc
     triton_block_impl.cc
     phased_array_impl.cc
     quantize_impl.cc

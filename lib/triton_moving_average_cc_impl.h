@@ -8,8 +8,8 @@
 #ifndef INCLUDED_TORCHDSP_TRITON_MOVING_AVERAGE_CC_IMPL_H
 #define INCLUDED_TORCHDSP_TRITON_MOVING_AVERAGE_CC_IMPL_H
 
+#include "triton_model.h"
 #include <torchdsp/triton_moving_average_cc.h>
-#include <torchdsp/triton_model.h>
 
 namespace gr {
 namespace torchdsp {
@@ -17,11 +17,12 @@ namespace torchdsp {
 class triton_moving_average_cc_impl : public triton_moving_average_cc
 {
 private:
-    std::unique_ptr<triton_model> model_;
+    triton_model model_;
 
 public:
     triton_moving_average_cc_impl(
-        std::unique_ptr<triton_model>& model,
+        const std::string& model_name,
+        const std::string& triton_url,
         unsigned int tap_size);
     ~triton_moving_average_cc_impl();
 

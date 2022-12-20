@@ -11,7 +11,7 @@
 #include "shm_utils.h"
 #include <http_client.h>
 #include <torchdsp/triton_block.h>
-#include <torchdsp/triton_model.h>
+#include "triton_model.h"
 
 namespace tc = triton::client;
 
@@ -22,14 +22,16 @@ namespace torchdsp {
 class triton_block_impl : public triton_block
 {
 private:
-    std::unique_ptr<triton_model> model_;
+    triton_model model_;
 
     size_t _single_item_size;
     size_t _items_per_inference;
 
 public:
     triton_block_impl(
-        std::unique_ptr<triton_model>& model,
+        const std::string& model_name,
+        const size_t max_batch_size,
+        const std::string& triton_url,
         const std::vector<int>& input_sizes,
         const std::vector<int>& output_sizes);
     ~triton_block_impl();

@@ -20,40 +20,41 @@ triton_block::sptr triton_block::make(
     const std::string& triton_url,
     const std::vector<int>& input_sizes,
     const std::vector<int>& output_sizes) {
-    auto model = triton_model::make(model_name, max_batch_size, triton_url);
-    if (model == nullptr)
-        throw std::runtime_error("Could not instantiate triton_model");
-
-
-    std::cout << "Instantiated model" << std::endl;
 
     // We ask Triton for what the input signature is if one is not providided.
     // We sometimes need to provide one because complexf is not supported in Triton.
     return gnuradio::make_block_sptr<triton_block_impl>(
-        model,
-        input_sizes.size() == 0 ? model.get()->get_input_signature() : input_sizes,
-        output_sizes.size() == 0 ? model.get()->get_output_signature() : output_sizes);
+        model_name, max_batch_size, triton_url, input_sizes, output_sizes);
 }
 
 /*
  * The private constructor
  */
 triton_block_impl::triton_block_impl(
-    std::unique_ptr<triton_model>& model,
+    const std::string& model_name,
+    const size_t max_batch_size,
+    const std::string& triton_url,
     const std::vector<int>& input_sizes,
     const std::vector<int>& output_sizes)
     : gr::sync_block(
           "triton_block",
-          gr::io_signature::makev(1, -1, input_sizes),
-          gr::io_signature::makev(1, -1, output_sizes)),
-      model_(std::move(model)) // this is invoked after calling sync_block constructor.
+          gr::io_signature::make(0, 0, 0),
+          gr::io_signature::make(0, 0, 0)),
+      model_(
+          model_name,
+          max_batch_size,
+          triton_url) // this is invoked after calling sync_block constructor.
 {
+    set_input_signature(gr::io_signature::makev(
+        1, -1, input_sizes.size() == 0 ? model_.get_input_signature() : input_sizes));
+    set_output_signature(gr::io_signature::makev(
+        1, -1, output_sizes.size() == 0 ? model_.get_output_signature() : output_sizes));
 
-    _items_per_inference = model_.get()->get_output_sizes()[0];
-    _single_item_size = output_sizes[0]; //model_.get()->get_output_signature()[0];
+    _items_per_inference = model_.get_output_sizes()[0];
+    _single_item_size = output_sizes[0]; // model_.get_output_signature()[0];
 
     set_output_multiple(_items_per_inference / _single_item_size);
-
+    
     std::cout << "Instantiated block" << std::endl;
 }
 
@@ -79,14 +80,13 @@ int triton_block_impl::work(
     auto num_items_per_batch = _items_per_inference / _single_item_size;
     auto batch_size = noutput_items / num_items_per_batch;
 
-    model_->infer_batch(in_ptrs, out_ptrs, batch_size);
+    model_.infer_batch(in_ptrs, out_ptrs, batch_size);
 
 
-    // std::cout << fmt::format("noutput_items: {}, batch_size: {}, num_items_per_batch: {}",
-    // noutput_items, batch_size, num_items_per_batch) << std::endl;;
-    // auto in0 = static_cast<const gr_complex*>(input_items[0]);
-    // auto out = static_cast<gr_complex*>(output_items[0]);
-    // for (int i=0; i< noutput_items; i++) {
+    // std::cout << fmt::format("noutput_items: {}, batch_size: {}, num_items_per_batch:
+    // {}", noutput_items, batch_size, num_items_per_batch) << std::endl;; auto in0 =
+    // static_cast<const gr_complex*>(input_items[0]); auto out =
+    // static_cast<gr_complex*>(output_items[0]); for (int i=0; i< noutput_items; i++) {
     //     out[i] = in[i];
     // }
 

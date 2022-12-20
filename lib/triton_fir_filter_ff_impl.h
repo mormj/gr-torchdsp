@@ -24,7 +24,7 @@
 #include "shm_utils.h"
 #include <http_client.h>
 #include <torchdsp/triton_fir_filter_ff.h>
-#include <torchdsp/triton_model.h>
+#include "triton_model.h"
 
 namespace gr {
 namespace torchdsp {
@@ -32,11 +32,12 @@ namespace torchdsp {
 class triton_fir_filter_ff_impl : public triton_fir_filter_ff
 {
 private:
-    std::unique_ptr<triton_model> model_;
+    triton_model model_;
 
 public:
     triton_fir_filter_ff_impl(
-        std::unique_ptr<triton_model>& model,
+        const std::string& model_name,
+        const std::string& triton_url,
         unsigned int tap_size);
     ~triton_fir_filter_ff_impl();
 
