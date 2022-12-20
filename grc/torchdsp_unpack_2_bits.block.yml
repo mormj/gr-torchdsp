@@ -4,7 +4,7 @@ category: '[torchdsp]'
 
 templates:
   imports: import torchdsp
-  make: torchdsp.triton_block("${"unpack_2_bits_cpu_openvino" if device == 'cpu' else "fft_gpu"}", ${max_batch_size}, ${triton_url}, [1], [2])
+  make: torchdsp.triton_block("${"unpack_2_bits_cpu_openvino" if device == 'cpu' else "unpack_2_bits_gpu"}", ${max_batch_size}, ${triton_url}, [1], [2])
 
 parameters:
 - id: triton_url

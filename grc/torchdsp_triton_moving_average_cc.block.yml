@@ -4,7 +4,7 @@ category: '[torchdsp]'
 
 templates:
   imports: import torchdsp
-  make: torchdsp.triton_moving_average_cc("${"moving_average_cc_cpu_openvino" if device == 'cpu' else "fft_gpu"}", ${triton_url}, 256)
+  make: torchdsp.triton_moving_average_cc("${"moving_average_cc_cpu_openvino" if device == 'cpu' else "moving_average_cc_gpu"}", ${triton_url}, 256)
 
 parameters:
 - id: triton_url

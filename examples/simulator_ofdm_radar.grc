@@ -1624,7 +1624,7 @@ blocks:
     affinity: ''
     alias: ''
     comment: ''
-    device: cpu
+    device: gpu
     max_batch_size: '256'
     maxoutbuf: '0'
     minoutbuf: '0'
@@ -1660,7 +1660,7 @@ blocks:
     affinity: ''
     alias: ''
     comment: ''
-    device: cpu
+    device: gpu
     max_batch_size: '256'
     maxoutbuf: '0'
     minoutbuf: '0'
@@ -1696,7 +1696,7 @@ blocks:
     affinity: ''
     alias: ''
     comment: ''
-    device: cpu
+    device: gpu
     max_batch_size: '256'
     maxoutbuf: '0'
     minoutbuf: '0'
@@ -1714,7 +1714,7 @@ blocks:
     affinity: ''
     alias: ''
     comment: ''
-    device: cpu
+    device: gpu
     max_batch_size: '256'
     maxoutbuf: '0'
     minoutbuf: '0'
@@ -1750,7 +1750,7 @@ blocks:
     affinity: ''
     alias: ''
     comment: ''
-    device: cpu
+    device: gpu
     max_batch_size: '256'
     maxoutbuf: '0'
     minoutbuf: '0'
@@ -1786,7 +1786,7 @@ blocks:
     affinity: ''
     alias: ''
     comment: ''
-    device: cpu
+    device: gpu
     max_batch_size: '4096'
     maxoutbuf: '0'
     minoutbuf: '0'
@@ -1822,7 +1822,7 @@ blocks:
     affinity: ''
     alias: ''
     comment: ''
-    device: cpu
+    device: gpu
     max_batch_size: '4096'
     maxoutbuf: '0'
     minoutbuf: '0'
@@ -1858,7 +1858,7 @@ blocks:
     affinity: ''
     alias: ''
     comment: ''
-    device: cpu
+    device: gpu
     max_batch_size: '2'
     maxoutbuf: '0'
     minoutbuf: '0'

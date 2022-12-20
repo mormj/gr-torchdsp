@@ -1,0 +1,26 @@
+name: "complex_to_mag_gpu"
+backend: "pytorch"
+max_batch_size: 4096
+input [
+  {
+    name: "input__0"
+    data_type: TYPE_FP32
+    dims: [ 1, 1024 ]
+  }
+]
+output [
+  {
+    name: "output__0"
+    data_type: TYPE_FP32
+    dims: [ 1, 512 ]
+  }
+]
+
+dynamic_batching {}
+
+instance_group [
+	{
+		count: 1
+		kind: KIND_GPU
+	}
+]

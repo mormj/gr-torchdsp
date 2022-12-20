@@ -4,7 +4,7 @@ category: '[torchdsp]'
 
 templates:
   imports: import torchdsp
-  make: torchdsp.triton_block("${"ofdm_divide_64_128_cpu_openvino" if device == 'cpu' else "fft_gpu"}", ${max_batch_size}, ${triton_url}, [8*64, 8*64], [8*128])
+  make: torchdsp.triton_block("${"ofdm_divide_64_128_cpu_openvino" if device == 'cpu' else "ofdm_divide_64_128_gpu"}", ${max_batch_size}, ${triton_url}, [8*64, 8*64], [8*128])
 
 parameters:
 - id: triton_url
