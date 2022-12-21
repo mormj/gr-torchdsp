@@ -1,0 +1,31 @@
+from torch import nn
+import torch
+
+OP_SIZE = {{items_per_batch}}
+
+
+class ComplexToMag(nn.Module):
+    def __init__(self):
+        super(ComplexToMag, self).__init__()
+
+    def forward(self, float_data ):
+        result = torch.sqrt(
+            torch.add(
+                torch.multiply(float_data[:,:,::2], float_data[:,:,::2]),
+                torch.multiply(float_data[:,:,1::2], float_data[:,:,1::2])
+            )
+        )
+        return result
+
+
+x = torch.randn(1, 1, OP_SIZE*2, requires_grad=False,
+                dtype=torch.float)
+
+
+model = ComplexToMag()
+model.eval()
+
+print(x.shape, model(x).shape)
+
+scripted = torch.jit.trace(model, [x])
+scripted.save("1/model.pt")

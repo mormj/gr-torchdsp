@@ -15,9 +15,11 @@ install(FILES
     torchdsp_fft_128_fwd_noshift_cc.block.yml
     torchdsp_multiply_conj.block.yml
     torchdsp_ofdm_divide_64_128.block.yml
+    torchdsp_ofdm_divide_cc.block.yml
     torchdsp_ofdm_symbol_recovery.block.yml
     torchdsp_transpose_128_39.block.yml
     torchdsp_transpose_39_128.block.yml
+    torchdsp_transpose_cc.block.yml
     torchdsp_triton_block.block.yml
     torchdsp_triton_fir_filter_ff.block.yml
     torchdsp_triton_beamform_cc.block.yml

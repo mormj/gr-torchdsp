@@ -1,5 +1,5 @@
-id: torchdsp_triton_complex_to_mag_sq
-label: Triton Complex To Mag ^2
+id: torchdsp_triton_transpose
+label: Triton Transpose
 category: '[torchdsp]'
 
 parameters:
@@ -15,31 +15,32 @@ parameters:
 - id: max_batch_size
   label: "Max Batch Size"
   dtype: int
-  default: 256
-- id: items_per_batch
-  label: "Items Per Batch"
-  dtype: int
-  default: 1024
+  default: 2
 - id: model_directory
   label: "Model Directory"
   dtype: string
   default: /tmp/rendered_triton_models
-- id: vlen
-  label: "Vector Length"
+- id: nrows
+  label: "Num Rows"
   dtype: int
-  default: 1
+  default: 39
+- id: ncols
+  label: "Num Columns"
+  dtype: int
+  default: 128
+
 
 inputs:
 - label: in
   domain: stream
   dtype: complex
-  vlen: ${vlen}
+  vlen: ${nrows*ncols}
 
 outputs:
 - label: out
   domain: stream
-  dtype: float
-  vlen: ${vlen}
+  dtype: complex
+  vlen: ${nrows*ncols}
 
 templates:
   imports: |- 
@@ -52,8 +53,8 @@ templates:
       tmp_modelname_path = "\'" + os.path.join(model_directory, tmp_modelname).replace("'", "") + "\'"
     %>\
     None
-    context = { "max_batch_size": ${max_batch_size}, "items_per_batch": ${items_per_batch}, "device": "${device}"}
-    torchdsp.DynamicModels.render_model('complex_to_mag_sq', ${tmp_modelname_path}, context, ${triton_url})
-    self.${id} = torchdsp.triton_block("${tmp_modelname}", ${max_batch_size}, ${triton_url}, [8*${vlen}], [4*${vlen}])
+    context = {"max_batch_size": ${max_batch_size}, "nrows": ${nrows}, "ncols": ${ncols}, "device": "${device}"}
+    torchdsp.DynamicModels.render_model('transpose_cc', ${tmp_modelname_path}, context, ${triton_url})
+    self.${id} = torchdsp.triton_block("${tmp_modelname}", ${max_batch_size}, ${triton_url}, [8*${nrows}*${ncols}], [8*${nrows}*${ncols}])
 
 file_format: 1

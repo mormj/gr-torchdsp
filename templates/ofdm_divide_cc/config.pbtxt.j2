@@ -1,0 +1,45 @@
+name: "{{rendered_model_name}}"
+backend: "pytorch"
+max_batch_size: {{max_batch_size}}
+input [
+  {
+    name: "input__0"
+    data_type: TYPE_FP32
+    dims: [1, {{fft_size_in*2}}]
+  },
+  {
+    name: "input__1"
+    data_type: TYPE_FP32
+    dims: [1, {{fft_size_in*2}}]
+  }
+]
+output [
+  {
+    name: "output__0"
+    data_type: TYPE_FP32
+    dims: [1, {{fft_size_out*2}} ]
+  }
+]
+
+dynamic_batching {}
+
+{%if device == 'cpu'%}
+instance_group [
+	{
+		count: 1
+		kind: KIND_CPU
+	}
+]
+optimization { execution_accelerators {
+  cpu_execution_accelerator : [ {
+    name : "openvino"
+  }]
+}}
+{%elif device == 'gpu'%}
+instance_group [
+	{
+		count: 1
+		kind: KIND_GPU
+	}
+]
+{% endif %}
