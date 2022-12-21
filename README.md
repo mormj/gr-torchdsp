@@ -51,3 +51,14 @@ To run the OOT, you need to have TIS running, Docker is by far the easiest way t
 ```
 sudo docker run --gpus all -it -p 8000:8000 --ipc=host --rm -v /path/to/models/directory/in/OOT/triton:/models nvcr.io/nvidia/tritonserver:22.04-py3 tritonserver --log-verbose 0 --model-repository=/models --strict-model-config=false
 ```
+
+# Running with Dynamic Models
+
+```
+sudo rm -rf /tmp/rendered_triton_models
+docker run --gpus all -it -p 8000:8000 --ipc=host --rm -v /tmp/rendered_triton_models:/models nvcr.io/nvidia/tritonserver:22.04-py3 tritonserver --log-verbose 4 --model-repository=/models --strict-model-config=false --model-control-mode=explicit
+```
+
+Then run one of the following examples
+- simple_ofdm_demod2.grc
+- simulator_ofdm_radar.grc
