@@ -1,23 +1,24 @@
-name: "unpack_2_bits_cpu_openvino"
+name: "{{rendered_model_name}}"
 backend: "pytorch"
-max_batch_size: 4096
+max_batch_size: {{max_batch_size}}
 input [
   {
     name: "input__0"
-    data_type: TYPE_INT8
-    dims: [ 1, 512 ]
+    data_type: TYPE_FP32
+    dims: [ 1, {{items_per_batch*2}} ]
   }
 ]
 output [
   {
     name: "output__0"
     data_type: TYPE_INT8
-    dims: [ 1, 1024 ]
+    dims: [ 1, {{items_per_batch}} ]
   }
 ]
 
 dynamic_batching {}
 
+{%if device == 'cpu'%}
 instance_group [
 	{
 		count: 1
@@ -29,3 +30,11 @@ optimization { execution_accelerators {
     name : "openvino"
   }]
 }}
+{%elif device == 'gpu'%}
+instance_group [
+	{
+		count: 1
+		kind: KIND_GPU
+	}
+]
+{% endif %}

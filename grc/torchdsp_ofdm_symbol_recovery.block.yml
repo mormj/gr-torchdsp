@@ -2,10 +2,6 @@ id: torchdsp_triton_ofdm_symbol_recovery
 label: Triton OFDM Symbol Recovery
 category: '[torchdsp]'
 
-templates:
-  imports: import torchdsp
-  make: torchdsp.triton_block("${"ofdm_symbol_recovery_cpu_openvino" if device == 'cpu' else "ofdm_symbol_recovery_gpu"}", ${max_batch_size}, ${triton_url}, [8*1280], [8*824])
-
 parameters:
 - id: triton_url
   label: "Triton URL"
@@ -20,17 +16,53 @@ parameters:
   label: "Max Batch Size"
   dtype: int
   default: 256
+- id: model_directory
+  label: "Model Directory"
+  dtype: string
+  default: /tmp/rendered_triton_models
+- id: fft_size
+  label: "FFT Size"
+  dtype: int
+  default: 1024
+- id: cplen
+  label: "CP Length"
+  dtype: int
+  default: 256
+- id: nsyms
+  label: "Number of Symbols"
+  dtype: int
+  default: 824
+- id: pilot_spacing
+  label: "Pilot Spacing"
+  dtype: int
+  default: 100
+
 
 inputs:
 - label: in
   domain: stream
   dtype: complex
-  vlen: 1280
+  vlen: ${fft_size+cplen}
 
 outputs:
 - label: out
   domain: stream
   dtype: complex
-  vlen: 824
+  vlen: ${nsyms}
+
+templates:
+  imports: |- 
+    import torchdsp
+  make: |-
+    <%
+      import secrets
+      import os
+      tmp_modelname = secrets.token_hex(16)
+      tmp_modelname_path = "\'" + os.path.join(model_directory, tmp_modelname).replace("'", "") + "\'"
+    %>\
+    None
+    context = { "max_batch_size": ${max_batch_size}, "device": "${device}", "fft_size": ${fft_size}, "cplen": ${cplen}, "nsyms": ${nsyms}, "pilot_spacing": ${pilot_spacing}}
+    torchdsp.DynamicModels.render_model('ofdm_symbol_recovery_cc', ${tmp_modelname_path}, context, ${triton_url})
+    self.${id} = torchdsp.triton_block("${tmp_modelname}", ${max_batch_size}, ${triton_url}, [8*(${fft_size}+${cplen})], [8*${nsyms}])
 
 file_format: 1

@@ -3,6 +3,8 @@ from scipy import signal as sp
 import numpy as np
 import torch
 
+OP_SIZE = {{items_per_batch}}
+OUT_SIZE = {{items_per_batch - length + 1}}
 
 class MovingAverage(nn.Module):
     def __init__(self, taps: torch.tensor):
@@ -16,17 +18,17 @@ class MovingAverage(nn.Module):
         result_r = nn.functional.conv1d(r, self.taps)
         result_i = nn.functional.conv1d(i, self.taps)
 
-        x = torch.zeros(iq_data.shape[0], iq_data.shape[1], 1538, dtype=torch.float32)
+        x = torch.zeros(iq_data.shape[0], iq_data.shape[1], OUT_SIZE*2, dtype=torch.float32)
         x[:,:,::2] = result_r
         x[:,:,1::2] = result_i
 
         return x
 
 
-x = torch.randn(1, 1, 1024*2, requires_grad=False,
+x = torch.randn(1, 1, OP_SIZE*2, requires_grad=False,
                 dtype=torch.float32)
 
-torch_taps = (1/100000.0) * torch.ones(1,256,
+torch_taps = {{scale}} * torch.ones(1,{{length}},
                 dtype=torch.float32)
 torch_taps.requires_grad = False
 model = MovingAverage(torch_taps.reshape(1, 1, -1))

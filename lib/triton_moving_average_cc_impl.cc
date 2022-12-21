@@ -16,10 +16,12 @@ using output_type = gr_complex;
 triton_moving_average_cc::sptr triton_moving_average_cc::make(
     const std::string& model_name,
     const std::string& triton_url,
-    unsigned int tap_size) {
+    size_t max_batch_size,
+    size_t items_per_batch,
+    size_t tap_size) {
 
     return gnuradio::make_block_sptr<triton_moving_average_cc_impl>(
-        model_name, triton_url, tap_size);
+        model_name, triton_url, max_batch_size, items_per_batch, tap_size);
 }
 
 
@@ -29,14 +31,16 @@ triton_moving_average_cc::sptr triton_moving_average_cc::make(
 triton_moving_average_cc_impl::triton_moving_average_cc_impl(
     const std::string& model_name,
     const std::string& triton_url,
-    unsigned int tap_size)
+    size_t max_batch_size,
+    size_t items_per_batch,
+    size_t tap_size)
     : gr::sync_block(
           "triton_moving_average_cc",
           gr::io_signature::make(1, 1, sizeof(input_type)),
           gr::io_signature::make(1, 1, sizeof(output_type))),
 
-      model_(model_name, 256, triton_url) {
-    set_output_multiple(1024 - (tap_size - 1)); // hard-coded from config.pbtxt
+      model_(model_name, max_batch_size, triton_url) {
+    set_output_multiple(items_per_batch - (tap_size - 1)); // hard-coded from config.pbtxt
     set_history(tap_size); // should come from exported model's taps in make_model.py
 }
 

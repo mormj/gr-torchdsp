@@ -586,7 +586,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [432, 580.0]
+    coordinate: [416, 588.0]
     rotation: 180
     state: true
 - name: blocks_stream_to_vector_0_0
@@ -659,25 +659,6 @@ blocks:
     bus_source: false
     bus_structure: null
     coordinate: [2488, 88.0]
-    rotation: 0
-    state: disabled
-- name: blocks_tag_debug_0
-  id: blocks_tag_debug
-  parameters:
-    affinity: ''
-    alias: ''
-    comment: ''
-    display: 'True'
-    filter: '""'
-    name: ''
-    num_inputs: '1'
-    type: complex
-    vlen: fft_len*2
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [900, 318]
     rotation: 0
     state: disabled
 - name: blocks_throttle_0
@@ -1479,7 +1460,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [952, 452.0]
+    coordinate: [912, 404.0]
     rotation: 180
     state: disabled
 - name: radar_os_cfar_2d_vc_0
@@ -1657,24 +1638,6 @@ blocks:
     coordinate: [2936, 428.0]
     rotation: 0
     state: disabled
-- name: torchdsp_triton_fft_128_fwd_noshift_0_0
-  id: torchdsp_triton_fft_128_fwd_noshift
-  parameters:
-    affinity: ''
-    alias: ''
-    comment: ''
-    device: gpu
-    max_batch_size: '256'
-    maxoutbuf: '0'
-    minoutbuf: '0'
-    triton_url: localhost:8000
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [592, 468.0]
-    rotation: 180
-    state: disabled
 - name: torchdsp_triton_fft_39_rev_0
   id: torchdsp_triton_fft_39_rev
   parameters:
@@ -1692,42 +1655,6 @@ blocks:
     bus_structure: null
     coordinate: [2320, 740.0]
     rotation: 0
-    state: disabled
-- name: torchdsp_triton_fft_39_rev_0_0
-  id: torchdsp_triton_fft_39_rev
-  parameters:
-    affinity: ''
-    alias: ''
-    comment: ''
-    device: gpu
-    max_batch_size: '256'
-    maxoutbuf: '0'
-    minoutbuf: '0'
-    triton_url: localhost:8000
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [88, 892.0]
-    rotation: 0
-    state: disabled
-- name: torchdsp_triton_fft_64_fwd_0
-  id: torchdsp_triton_fft_64_fwd
-  parameters:
-    affinity: ''
-    alias: ''
-    comment: ''
-    device: gpu
-    max_batch_size: '256'
-    maxoutbuf: '0'
-    minoutbuf: '0'
-    triton_url: localhost:8000
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [1264, 428.0]
-    rotation: 180
     state: disabled
 - name: torchdsp_triton_fft_64_fwd_0_0
   id: torchdsp_triton_fft_64_fwd
@@ -1788,7 +1715,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [656, 532.0]
+    coordinate: [568, 484.0]
     rotation: 180
     state: true
 - name: torchdsp_triton_fft_vfvc_0_0_0
@@ -1810,7 +1737,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [80, 956.0]
+    coordinate: [48, 804.0]
     rotation: 0
     state: true
 - name: torchdsp_triton_log10_0
@@ -1852,24 +1779,6 @@ blocks:
     coordinate: [2720, 60.0]
     rotation: 0
     state: disabled
-- name: torchdsp_triton_ofdm_divide_64_128_0_0
-  id: torchdsp_triton_ofdm_divide_64_128
-  parameters:
-    affinity: ''
-    alias: ''
-    comment: ''
-    device: gpu
-    max_batch_size: '4096'
-    maxoutbuf: '0'
-    minoutbuf: '0'
-    triton_url: localhost:8000
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [936, 468.0]
-    rotation: 180
-    state: disabled
 - name: torchdsp_triton_ofdm_divide_cc_0
   id: torchdsp_triton_ofdm_divide_cc
   parameters:
@@ -1888,7 +1797,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [944, 532.0]
+    coordinate: [920, 460.0]
     rotation: 180
     state: true
 - name: torchdsp_triton_transpose_0
@@ -1909,7 +1818,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [192, 612.0]
+    coordinate: [216, 460.0]
     rotation: 180
     state: true
 - name: torchdsp_triton_transpose_0_0
@@ -1930,7 +1839,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [416, 916.0]
+    coordinate: [424, 804.0]
     rotation: 0
     state: true
 - name: torchdsp_triton_transpose_128_39_0
@@ -1951,24 +1860,6 @@ blocks:
     coordinate: [2984, 668.0]
     rotation: 180
     state: disabled
-- name: torchdsp_triton_transpose_128_39_0_0
-  id: torchdsp_triton_transpose_128_39
-  parameters:
-    affinity: ''
-    alias: ''
-    comment: ''
-    device: gpu
-    max_batch_size: '4096'
-    maxoutbuf: '0'
-    minoutbuf: '0'
-    triton_url: localhost:8000
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [208, 532.0]
-    rotation: 180
-    state: disabled
 - name: torchdsp_triton_transpose_39_128_0
   id: torchdsp_triton_transpose_39_128
   parameters:
@@ -1985,24 +1876,6 @@ blocks:
     bus_source: false
     bus_structure: null
     coordinate: [2544, 788.0]
-    rotation: 0
-    state: disabled
-- name: torchdsp_triton_transpose_39_128_0_0
-  id: torchdsp_triton_transpose_39_128
-  parameters:
-    affinity: ''
-    alias: ''
-    comment: ''
-    device: gpu
-    max_batch_size: '2'
-    maxoutbuf: '0'
-    minoutbuf: '0'
-    triton_url: localhost:8000
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [440, 804.0]
     rotation: 0
     state: disabled
 
@@ -2026,9 +1899,7 @@ connections:
 - [blocks_repack_bits_bb_0, '0', digital_chunks_to_symbols_xx_0_0, '0']
 - [blocks_stream_to_tagged_stream_0, '0', blocks_repack_bits_bb_0, '0']
 - [blocks_stream_to_vector_0, '0', torchdsp_triton_transpose_0, '0']
-- [blocks_stream_to_vector_0, '0', torchdsp_triton_transpose_128_39_0_0, '0']
 - [blocks_stream_to_vector_0_0, '0', torchdsp_triton_transpose_0_0, '0']
-- [blocks_stream_to_vector_0_0, '0', torchdsp_triton_transpose_39_128_0_0, '0']
 - [blocks_stream_to_vector_0_0_0, '0', fft_vxx_0_1, '0']
 - [blocks_stream_to_vector_0_0_0, '0', radar_transpose_matrix_vcvc_0, '0']
 - [blocks_stream_to_vector_0_0_0_0, '0', fft_vxx_0_1_0, '0']
@@ -2043,27 +1914,23 @@ connections:
 - [blocks_vector_to_stream_1, '0', blocks_add_xx_0_0, '0']
 - [blocks_vector_to_stream_1_0, '0', blocks_complex_to_mag_0, '0']
 - [blocks_vector_to_stream_2, '0', blocks_complex_to_mag_1, '0']
-- [blocks_vector_to_stream_3, '0', torchdsp_triton_fft_39_rev_0_0, '0']
 - [blocks_vector_to_stream_3, '0', torchdsp_triton_fft_vfvc_0_0_0, '0']
 - [blocks_vector_to_stream_3_0, '0', blocks_complex_to_mag_squared_0, '0']
+- [blocks_vector_to_stream_3_0, '0', radar_os_cfar_2d_vc_0, '0']
 - [blocks_vector_to_stream_3_0, '0', torchdsp_triton_complex_to_mag_sq_0, '0']
 - [digital_chunks_to_symbols_xx_0_0, '0', digital_ofdm_carrier_allocator_cvc_0, '0']
 - [digital_ofdm_carrier_allocator_cvc_0, '0', blocks_vector_to_stream_0_0_0, '0']
 - [digital_ofdm_carrier_allocator_cvc_0, '0', fft_vxx_0, '0']
 - [digital_ofdm_carrier_allocator_cvc_0, '0', radar_ofdm_divide_vcvc_0, '0']
-- [digital_ofdm_carrier_allocator_cvc_0, '0', torchdsp_triton_ofdm_divide_64_128_0_0,
-  '0']
 - [digital_ofdm_carrier_allocator_cvc_0, '0', torchdsp_triton_ofdm_divide_cc_0, '0']
 - [digital_ofdm_cyclic_prefixer_0, '0', radar_static_target_simulator_cc_0, '0']
 - [fft_vxx_0, '0', digital_ofdm_cyclic_prefixer_0, '0']
 - [fft_vxx_0_0, '0', radar_ofdm_divide_vcvc_0, '1']
 - [fft_vxx_0_1, '0', radar_transpose_matrix_vcvc_0, '0']
 - [fft_vxx_0_1_0, '0', radar_transpose_matrix_vcvc_0_0, '0']
-- [fft_vxx_0_1_0, '0', torchdsp_triton_transpose_39_128_0_0, '0']
 - [radar_estimator_ofdm_0, Msg out, radar_print_results_0, Msg in]
 - [radar_ofdm_cyclic_prefix_remover_cvc_0, '0', blocks_vector_to_stream_0_0, '0']
 - [radar_ofdm_cyclic_prefix_remover_cvc_0, '0', fft_vxx_0_0, '0']
-- [radar_ofdm_cyclic_prefix_remover_cvc_0, '0', torchdsp_triton_fft_64_fwd_0, '0']
 - [radar_ofdm_cyclic_prefix_remover_cvc_0, '0', torchdsp_triton_fft_vfvc_0, '0']
 - [radar_ofdm_divide_vcvc_0, '0', fft_vxx_0_1, '0']
 - [radar_os_cfar_2d_vc_0, Msg out, radar_estimator_ofdm_0, Msg in]
@@ -2072,19 +1939,13 @@ connections:
 - [radar_transpose_matrix_vcvc_0, '0', blocks_vector_to_stream_2, '0']
 - [radar_transpose_matrix_vcvc_0, '0', fft_vxx_0_1_0, '0']
 - [radar_transpose_matrix_vcvc_0_0, '0', blocks_complex_to_mag_squared_0, '0']
-- [radar_transpose_matrix_vcvc_0_0, '0', blocks_tag_debug_0, '0']
 - [radar_transpose_matrix_vcvc_0_0, '0', radar_os_cfar_2d_vc_0, '0']
 - [torchdsp_triton_complex_to_mag_sq_0, '0', blocks_nlog10_ff_0, '0']
 - [torchdsp_triton_complex_to_mag_sq_0, '0', torchdsp_triton_log10_0, '0']
 - [torchdsp_triton_fft_128_fwd_noshift_0, '0', blocks_stream_to_vector_0_0_0, '0']
 - [torchdsp_triton_fft_128_fwd_noshift_0, '0', torchdsp_triton_transpose_128_39_0,
   '0']
-- [torchdsp_triton_fft_128_fwd_noshift_0_0, '0', blocks_stream_to_vector_0, '0']
-- [torchdsp_triton_fft_128_fwd_noshift_0_0, '0', radar_transpose_matrix_vcvc_0, '0']
 - [torchdsp_triton_fft_39_rev_0, '0', torchdsp_triton_transpose_39_128_0, '0']
-- [torchdsp_triton_fft_39_rev_0_0, '0', blocks_stream_to_vector_0_0, '0']
-- [torchdsp_triton_fft_64_fwd_0, '0', radar_ofdm_divide_vcvc_0, '1']
-- [torchdsp_triton_fft_64_fwd_0, '0', torchdsp_triton_ofdm_divide_64_128_0_0, '1']
 - [torchdsp_triton_fft_64_fwd_0_0, '0', blocks_complex_to_mag_squared_1_0, '0']
 - [torchdsp_triton_fft_64_fwd_0_0, '0', torchdsp_triton_ofdm_divide_64_128_0, '1']
 - [torchdsp_triton_fft_vfvc_0, '0', torchdsp_triton_ofdm_divide_cc_0, '1']
@@ -2095,19 +1956,12 @@ connections:
 - [torchdsp_triton_ofdm_divide_64_128_0, '0', blocks_vector_to_stream_1_0, '0']
 - [torchdsp_triton_ofdm_divide_64_128_0, '0', torchdsp_triton_fft_128_fwd_noshift_0,
   '0']
-- [torchdsp_triton_ofdm_divide_64_128_0_0, '0', fft_vxx_0_1, '0']
-- [torchdsp_triton_ofdm_divide_64_128_0_0, '0', torchdsp_triton_fft_128_fwd_noshift_0_0,
-  '0']
 - [torchdsp_triton_ofdm_divide_cc_0, '0', torchdsp_triton_fft_vfvc_0_0, '0']
 - [torchdsp_triton_transpose_0, '0', blocks_vector_to_stream_2, '0']
 - [torchdsp_triton_transpose_0, '0', blocks_vector_to_stream_3, '0']
 - [torchdsp_triton_transpose_0_0, '0', blocks_vector_to_stream_3_0, '0']
 - [torchdsp_triton_transpose_128_39_0, '0', blocks_stream_to_vector_0_0_0_0, '0']
 - [torchdsp_triton_transpose_128_39_0, '0', torchdsp_triton_fft_39_rev_0, '0']
-- [torchdsp_triton_transpose_128_39_0_0, '0', blocks_vector_to_stream_2, '0']
-- [torchdsp_triton_transpose_128_39_0_0, '0', blocks_vector_to_stream_3, '0']
-- [torchdsp_triton_transpose_128_39_0_0, '0', fft_vxx_0_1_0, '0']
-- [torchdsp_triton_transpose_39_128_0_0, '0', blocks_vector_to_stream_3_0, '0']
 
 metadata:
   file_format: 1

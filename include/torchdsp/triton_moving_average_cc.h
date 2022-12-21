@@ -35,7 +35,9 @@ public:
     static sptr make(
         const std::string& model_name,
         const std::string& triton_url,
-        unsigned int tap_size);
+        size_t max_batch_size,
+        size_t items_per_batch,
+        size_t tap_size);
 };
 
 } // namespace torchdsp

@@ -10,15 +10,9 @@ install(FILES
     torchdsp_complex_to_mag_sq.block.yml
     torchdsp_log10.block.yml
     torchdsp_fft_cc.block.yml
-    torchdsp_fft_64_fwd_cc.block.yml
-    torchdsp_fft_39_rev_cc.block.yml
-    torchdsp_fft_128_fwd_noshift_cc.block.yml
-    torchdsp_multiply_conj.block.yml
-    torchdsp_ofdm_divide_64_128.block.yml
+    torchdsp_multiply_conj_cc.block.yml
     torchdsp_ofdm_divide_cc.block.yml
     torchdsp_ofdm_symbol_recovery.block.yml
-    torchdsp_transpose_128_39.block.yml
-    torchdsp_transpose_39_128.block.yml
     torchdsp_transpose_cc.block.yml
     torchdsp_triton_block.block.yml
     torchdsp_triton_fir_filter_ff.block.yml
@@ -26,7 +20,7 @@ install(FILES
     torchdsp_triton_copy.block.yml
     torchdsp_phased_array.block.yml
     torchdsp_quantize.block.yml
-    torchdsp_qpsk_decoder.block.yml
-    torchdsp_unpack_2_bits.block.yml
+    torchdsp_qpsk_decoder_cb.block.yml
+    torchdsp_unpack_k_bits.block.yml
     torchdsp_triton_moving_average_cc.block.yml DESTINATION share/gnuradio/grc/blocks
 )

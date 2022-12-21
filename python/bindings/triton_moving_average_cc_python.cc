@@ -14,7 +14,7 @@
 /* BINDTOOL_GEN_AUTOMATIC(0)                                                       */
 /* BINDTOOL_USE_PYGCCXML(0)                                                        */
 /* BINDTOOL_HEADER_FILE(triton_moving_average_cc.h) */
-/* BINDTOOL_HEADER_FILE_HASH(bd0a4dcc2560685731d717b9dd54fe6c)                     */
+/* BINDTOOL_HEADER_FILE_HASH(09f9da407d0fadb813324a5c64eed439)                     */
 /***********************************************************************************/
 
 #include <pybind11/complex.h>
@@ -44,6 +44,8 @@ void bind_triton_moving_average_cc(py::module& m) {
             py::init(&triton_moving_average_cc::make),
             py::arg("model_name"),
             py::arg("triton_url"),
+            py::arg("max_batch_size"),
+            py::arg("items_per_batch"),
             py::arg("tap_size"),
             D(triton_moving_average_cc, make))
 

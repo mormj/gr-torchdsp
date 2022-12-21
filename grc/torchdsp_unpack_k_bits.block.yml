@@ -1,5 +1,5 @@
-id: torchdsp_triton_moving_average_cc
-label: Triton Moving Average
+id: torchdsp_triton_unpack_k_bits
+label: Triton Unpack K Bits
 category: '[torchdsp]'
 
 parameters:
@@ -24,25 +24,21 @@ parameters:
   label: "Model Directory"
   dtype: string
   default: /tmp/rendered_triton_models
-- id: length
-  label: "Length"
+- id: num_bits
+  label: "Num Bits"
   dtype: int
-  default: 256
-- id: scale
-  label: "Scale"
-  dtype: float
-  default: 1.0/256
-
+  default: 2
 
 inputs:
 - label: in
   domain: stream
-  dtype: complex
+  dtype: byte
 
 outputs:
 - label: out
   domain: stream
-  dtype: complex
+  dtype: byte
+  vlen: ${num_bits}
 
 templates:
   imports: |- 
@@ -55,8 +51,8 @@ templates:
       tmp_modelname_path = "\'" + os.path.join(model_directory, tmp_modelname).replace("'", "") + "\'"
     %>\
     None
-    context = { "max_batch_size": ${max_batch_size}, "items_per_batch": ${items_per_batch}, "device": "${device}", "scale": ${scale}, "length": ${length}}
-    torchdsp.DynamicModels.render_model('moving_average_cc', ${tmp_modelname_path}, context, ${triton_url})
-    self.${id} = torchdsp.triton_moving_average_cc("${tmp_modelname}", ${triton_url}, ${max_batch_size}, ${items_per_batch}, ${length})
+    context = { "max_batch_size": ${max_batch_size}, "items_per_batch": ${items_per_batch}, "num_bits": ${num_bits}, "device": "${device}"}
+    torchdsp.DynamicModels.render_model('unpack_k_bits', ${tmp_modelname_path}, context, ${triton_url})
+    self.${id} = torchdsp.triton_block("${tmp_modelname}", ${max_batch_size}, ${triton_url}, [1], [${num_bits}])
 
 file_format: 1

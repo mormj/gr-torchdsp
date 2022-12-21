@@ -1,20 +1,18 @@
 from torch import nn
 import torch
 
-OP_SIZE = 512
+OP_SIZE = {{items_per_batch}}
+NUM_BITS = {{num_bits}}
 
-
-class Unpack2Bits(nn.Module):
+class UnpackKBits(nn.Module):
     def __init__(self):
-        super(Unpack2Bits, self).__init__()
+        super(UnpackKBits, self).__init__()
 
     def forward(self, inp ):
 
         result = torch.zeros(inp.shape[0], inp.shape[1], inp.shape[2]*2, dtype=torch.int8)
-        # Grab the MSB
-        result[:,:,::2] = torch.bitwise_right_shift(torch.bitwise_and(inp, 0x02), 1)
-        # Grab the LSB
-        result[:,:,1::2] = torch.bitwise_and(inp, 0x01)
+        for kk in range(NUM_BITS):
+            result[:,:,kk::2] = torch.bitwise_right_shift(torch.bitwise_and(inp, 1 << (NUM_BITS-1-kk)), kk)
 
         return result
 
@@ -23,7 +21,7 @@ x = torch.randint(4, (1, 1, OP_SIZE), requires_grad=False,
                 dtype=torch.int8)
 
 
-model = Unpack2Bits()
+model = UnpackKBits()
 model.eval()
 
 print(x.shape, model(x).shape, model(x).dtype )

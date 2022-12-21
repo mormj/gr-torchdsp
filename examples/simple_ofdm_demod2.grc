@@ -300,7 +300,7 @@ blocks:
     bus_structure: null
     coordinate: [960, 688.0]
     rotation: 180
-    state: disabled
+    state: enabled
 - name: blocks_moving_average_xx_0
   id: blocks_moving_average_xx
   parameters:
@@ -424,7 +424,7 @@ blocks:
     bus_structure: null
     coordinate: [1120, 1208.0]
     rotation: 0
-    state: true
+    state: enabled
 - name: blocks_vector_to_stream_0_0
   id: blocks_vector_to_stream
   parameters:
@@ -538,7 +538,7 @@ blocks:
     bus_structure: null
     coordinate: [1144, 752.0]
     rotation: 180
-    state: enabled
+    state: disabled
 - name: epy_block_1
   id: epy_block
   parameters:
@@ -1188,17 +1188,20 @@ blocks:
     alias: ''
     comment: ''
     device: gpu
+    items_per_batch: '1024'
     max_batch_size: '256'
     maxoutbuf: '0'
     minoutbuf: '0'
+    model_directory: /tmp/rendered_triton_models
     triton_url: localhost:8000
+    vlen: '1'
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1088, 332.0]
+    coordinate: [1088, 292.0]
     rotation: 0
-    state: true
+    state: enabled
 - name: torchdsp_triton_moving_average_cc_0
   id: torchdsp_triton_moving_average_cc
   parameters:
@@ -1206,33 +1209,39 @@ blocks:
     alias: ''
     comment: ''
     device: cpu
+    items_per_batch: '1024'
+    length: '256'
     max_batch_size: '256'
     maxoutbuf: '0'
     minoutbuf: '0'
+    model_directory: /tmp/rendered_triton_models
+    scale: 1.0/256
     triton_url: localhost:8000
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [848, 316.0]
+    coordinate: [864, 268.0]
     rotation: 0
     state: enabled
-- name: torchdsp_triton_multiply_conj_0
-  id: torchdsp_triton_multiply_conj
+- name: torchdsp_triton_multiply_conj_cc_0
+  id: torchdsp_triton_multiply_conj_cc
   parameters:
     affinity: ''
     alias: ''
     comment: ''
-    device: gpu
+    device: cpu
+    items_per_batch: '1024'
     max_batch_size: '256'
     maxoutbuf: '0'
     minoutbuf: '0'
+    model_directory: /tmp/rendered_triton_models
     triton_url: localhost:8000
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [608, 348.0]
+    coordinate: [600, 324.0]
     rotation: 0
     state: true
 - name: torchdsp_triton_ofdm_symbol_recovery_0
@@ -1241,52 +1250,61 @@ blocks:
     affinity: ''
     alias: ''
     comment: ''
+    cplen: '256'
     device: gpu
+    fft_size: '1024'
     max_batch_size: '256'
     maxoutbuf: '0'
     minoutbuf: '0'
+    nsyms: '824'
+    pilot_spacing: '100'
     triton_url: localhost:8000
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [424, 804.0]
+    coordinate: [424, 772.0]
     rotation: 180
     state: enabled
-- name: torchdsp_triton_qpsk_decoder_0
-  id: torchdsp_triton_qpsk_decoder
+- name: torchdsp_triton_qpsk_decoder_cb_0
+  id: torchdsp_triton_qpsk_decoder_cb
   parameters:
     affinity: ''
     alias: ''
     comment: ''
-    device: gpu
+    device: cpu
+    items_per_batch: '1024'
     max_batch_size: '256'
     maxoutbuf: '0'
     minoutbuf: '0'
+    model_directory: /tmp/rendered_triton_models
     triton_url: localhost:8000
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [656, 1164.0]
+    coordinate: [568, 1252.0]
     rotation: 0
     state: true
-- name: torchdsp_triton_unpack_2_bits_0
-  id: torchdsp_triton_unpack_2_bits
+- name: torchdsp_triton_unpack_k_bits_0
+  id: torchdsp_triton_unpack_k_bits
   parameters:
     affinity: ''
     alias: ''
     comment: ''
-    device: gpu
+    device: cpu
+    items_per_batch: '1024'
     max_batch_size: '256'
     maxoutbuf: '0'
     minoutbuf: '0'
+    model_directory: /tmp/rendered_triton_models
+    num_bits: '2'
     triton_url: localhost:8000
   states:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [912, 1164.0]
+    coordinate: [832, 1244.0]
     rotation: 0
     state: true
 - name: tx_out
@@ -1328,11 +1346,12 @@ connections:
 - [blocks_complex_to_mag_0, '0', blocks_peak_detector2_fb_0, '0']
 - [blocks_complex_to_mag_0, '0', qtgui_time_sink_x_0_0, '0']
 - [blocks_delay_0, '0', blocks_multiply_conjugate_cc_0, '1']
-- [blocks_delay_0, '0', torchdsp_triton_multiply_conj_0, '1']
+- [blocks_delay_0, '0', torchdsp_triton_multiply_conj_cc_0, '1']
 - [blocks_delay_1, '0', blocks_stream_to_vector_1, '0']
 - [blocks_moving_average_xx_0, '0', blocks_complex_to_mag_0, '0']
 - [blocks_moving_average_xx_0, '0', torchdsp_triton_complex_to_mag_0, '0']
 - [blocks_multiply_conjugate_cc_0, '0', blocks_moving_average_xx_0, '0']
+- [blocks_multiply_conjugate_cc_0, '0', torchdsp_triton_moving_average_cc_0, '0']
 - [blocks_peak_detector2_fb_0, '0', blocks_char_to_float_0, '0']
 - [blocks_peak_detector2_fb_0, '0', epy_block_0, '1']
 - [blocks_stream_to_vector_1, '0', ofdm_symbol_rx, '0']
@@ -1342,9 +1361,10 @@ connections:
 - [blocks_vector_to_stream_0, '0', blocks_char_to_float_0_0_1, '0']
 - [blocks_vector_to_stream_0_0, '0', digital_constellation_decoder_cb_0, '0']
 - [blocks_vector_to_stream_0_0, '0', qtgui_const_sink_x_0, '0']
-- [blocks_vector_to_stream_0_0, '0', torchdsp_triton_qpsk_decoder_0, '0']
+- [blocks_vector_to_stream_0_0, '0', torchdsp_triton_qpsk_decoder_cb_0, '0']
 - [digital_constellation_decoder_cb_0, '0', blocks_char_to_float_0_0_0, '0']
 - [digital_constellation_decoder_cb_0, '0', blocks_unpack_k_bits_bb_0, '0']
+- [digital_constellation_decoder_cb_0, '0', torchdsp_triton_unpack_k_bits_0, '0']
 - [digital_constellation_encoder_bc_1_1, '0', blocks_stream_to_vector_2, '0']
 - [digital_ofdm_cyclic_prefixer_0, '0', blocks_add_xx_0, '1']
 - [epy_block_0, '0', blocks_stream_to_vector_1, '0']
@@ -1354,19 +1374,17 @@ connections:
 - [torchdsp_triton_complex_to_mag_0, '0', blocks_peak_detector2_fb_0, '0']
 - [torchdsp_triton_complex_to_mag_0, '0', qtgui_time_sink_x_0_0, '0']
 - [torchdsp_triton_moving_average_cc_0, '0', torchdsp_triton_complex_to_mag_0, '0']
-- [torchdsp_triton_multiply_conj_0, '0', blocks_moving_average_xx_0, '0']
-- [torchdsp_triton_multiply_conj_0, '0', torchdsp_triton_moving_average_cc_0, '0']
+- [torchdsp_triton_multiply_conj_cc_0, '0', blocks_moving_average_xx_0, '0']
+- [torchdsp_triton_multiply_conj_cc_0, '0', torchdsp_triton_moving_average_cc_0, '0']
 - [torchdsp_triton_ofdm_symbol_recovery_0, '0', blocks_vector_to_stream_0_0, '0']
-- [torchdsp_triton_qpsk_decoder_0, '0', blocks_char_to_float_0_0_0_0, '0']
-- [torchdsp_triton_qpsk_decoder_0, '0', blocks_unpack_k_bits_bb_0, '0']
-- [torchdsp_triton_qpsk_decoder_0, '0', torchdsp_triton_unpack_2_bits_0, '0']
-- [torchdsp_triton_unpack_2_bits_0, '0', blocks_vector_to_stream_0, '0']
+- [torchdsp_triton_qpsk_decoder_cb_0, '0', torchdsp_triton_unpack_k_bits_0, '0']
+- [torchdsp_triton_unpack_k_bits_0, '0', blocks_vector_to_stream_0, '0']
 - [virtual_source_0, '0', blocks_delay_0, '0']
 - [virtual_source_0, '0', blocks_delay_1, '0']
 - [virtual_source_0, '0', blocks_multiply_conjugate_cc_0, '0']
 - [virtual_source_0, '0', epy_block_0, '0']
-- [virtual_source_0, '0', torchdsp_triton_multiply_conj_0, '0']
+- [virtual_source_0, '0', torchdsp_triton_multiply_conj_cc_0, '0']
 
 metadata:
   file_format: 1
-  grc_version: v3.11.0.0git-352-g6efdc9d8
+  grc_version: v3.11.0.0git-357-g568fe07b
