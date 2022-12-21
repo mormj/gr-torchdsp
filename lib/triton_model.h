@@ -11,7 +11,6 @@
 #include "shm_utils.h"
 #include <http_client.h>
 #include <rapidjson/document.h>
-#include "triton_model.h"
 
 namespace tc = triton::client;
 

@@ -20,3 +20,4 @@ except ModuleNotFoundError:
     pass
 
 # import any pure python here
+from .dynamic_models import DynamicModels

@@ -33,6 +33,7 @@ list(APPEND torchdsp_python_files
     phased_array_python.cc
     quantize_python.cc
     triton_moving_average_cc_python.cc 
+    client_utils.cc
     python_bindings.cc)
 
 GR_PYBIND_MAKE_OOT(torchdsp

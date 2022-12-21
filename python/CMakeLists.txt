@@ -22,7 +22,9 @@ add_subdirectory(bindings)
 # #######################################################################
 GR_PYTHON_INSTALL(
     FILES
-    __init__.py DESTINATION ${GR_PYTHON_DIR}/torchdsp
+    __init__.py 
+    dynamic_models.py
+    DESTINATION ${GR_PYTHON_DIR}/torchdsp
 )
 
 # #######################################################################

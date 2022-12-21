@@ -2,10 +2,6 @@ id: torchdsp_triton_fft_vfvc
 label: Triton FFT
 category: '[torchdsp]'
 
-templates:
-  imports: import torchdsp
-  make: torchdsp.triton_block("${"fft_cpu_openvino" if device == 'cpu' else "fft_gpu"}", ${max_batch_size}, ${triton_url}, [8], [8])
-
 parameters:
 - id: triton_url
   label: "Triton URL"
@@ -20,15 +16,48 @@ parameters:
   label: "Max Batch Size"
   dtype: int
   default: 256
+- id: model_directory
+  label: "Model Directory"
+  dtype: string
+  default: /tmp/rendered_triton_models
+- id: fft_size
+  label: "FFT Size"
+  dtype: int
+  default: 512
+- id: shift
+  label: "FFT Shift"
+  dtype: bool
+  default: False
+- id: forward
+  label: "Forward"
+  dtype: bool
+  default: True 
 
 inputs:
 - label: in
   domain: stream
   dtype: complex
+  vlen: ${fft_size}
 
 outputs:
 - label: out
   domain: stream
   dtype: complex
+  vlen: ${fft_size}
+
+templates:
+  imports: |- 
+    import torchdsp
+  make: |-
+    <%
+      import secrets
+      import os
+      tmp_modelname = secrets.token_hex(16)
+      tmp_modelname_path = "\'" + os.path.join(model_directory, tmp_modelname).replace("'", "") + "\'"
+    %>\
+    None
+    context = {"max_batch_size": ${max_batch_size}, "fft_size": ${fft_size}, "device": "${device}", "shift": ${shift}, "forward": ${forward}}
+    torchdsp.DynamicModels.render_model('fft_cc', ${tmp_modelname_path}, context, ${triton_url})
+    self.${id} = torchdsp.triton_block("${tmp_modelname}", ${max_batch_size}, ${triton_url}, [8*${fft_size}], [8*${fft_size}])
 
 file_format: 1

@@ -27,7 +27,7 @@ void bind_phased_array(py::module& m);
 void bind_quantize(py::module& m);
 void bind_triton_moving_average_cc(py::module& m);
 // ) END BINDING_FUNCTION_PROTOTYPES
-
+void bind_client_utils(py::module& m);
 
 // We need this hack because import_array() returns NULL
 // for newer Python versions.
@@ -58,4 +58,5 @@ PYBIND11_MODULE(torchdsp_python, m) {
     bind_quantize(m);
     bind_triton_moving_average_cc(m);
     // ) END BINDING_FUNCTION_CALLS
+    bind_client_utils(m);
 }

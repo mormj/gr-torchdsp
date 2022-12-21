@@ -180,3 +180,6 @@ endif(ENABLE_PYTHON)
 install(FILES cmake/Modules/torchdspConfig.cmake
     DESTINATION ${CMAKE_MODULES_DIR}/torchdsp
 )
+
+install(DIRECTORY templates
+    DESTINATION ${GR_PKG_DATA_DIR})
