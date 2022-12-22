@@ -6,7 +6,7 @@
 #
 # GNU Radio Python Flow Graph
 # Title: Not titled yet
-# GNU Radio version: v3.11.0.0git-348-gab2ee30f
+# GNU Radio version: v3.11.0.0git-357-g568fe07b
 
 from packaging.version import Version as StrictVersion
 
@@ -91,6 +91,8 @@ class vanilla_beamforming(gr.top_block, Qt.QWidget):
         ##################################################
         # Blocks
         ##################################################
+
+        self.torchdsp_triton_beamform_cc_0 = torchdsp.triton_block("beamform_cc_cpu_openvino", 4096, 'localhost:8000', [8, 8, 8, 8], [8])
         self.torchdsp_quantize_0_2 = torchdsp.quantize(nbits)
         self.torchdsp_quantize_0_1 = torchdsp.quantize(nbits)
         self.torchdsp_quantize_0_0 = torchdsp.quantize(nbits)
@@ -301,7 +303,6 @@ class vanilla_beamforming(gr.top_block, Qt.QWidget):
         self.n2 = analog.fastnoise_source_c(analog.GR_GAUSSIAN, noise_level, (-2785836), 8192)
         self.n1 = analog.fastnoise_source_c(analog.GR_GAUSSIAN, noise_level, 309834890, 8192)
         self.blocks_throttle_0 = blocks.throttle(gr.sizeof_gr_complex*1, samp_rate,True)
-        self.blocks_multiply_matrix_xx_0_0 = blocks.multiply_matrix_cc(((1,1,1,1),), gr.TPP_ALL_TO_ALL)
         self.blocks_multiply_matrix_xx_0 = blocks.multiply_matrix_cc(bf_matrix, gr.TPP_ALL_TO_ALL)
         self._bf_angle_range = Range(-180, 180, 1, 0.0, 200)
         self._bf_angle_win = RangeWidget(self._bf_angle_range, self.set_bf_angle, "'bf_angle'", "counter_slider", float, QtCore.Qt.Horizontal)
@@ -326,7 +327,6 @@ class vanilla_beamforming(gr.top_block, Qt.QWidget):
         self.connect((self.a4, 0), (self.torchdsp_quantize_0_2, 0))
         self.connect((self.analog_sig_source_x_0, 0), (self.blocks_throttle_0, 0))
         self.connect((self.blocks_multiply_matrix_xx_0, 0), (self.qtgui_freq_sink_x_0_0, 0))
-        self.connect((self.blocks_multiply_matrix_xx_0_0, 0), (self.qtgui_freq_sink_x_0_0_0, 0))
         self.connect((self.blocks_throttle_0, 0), (self.torchdsp_phased_array_0, 0))
         self.connect((self.n1, 0), (self.a1, 1))
         self.connect((self.n2, 0), (self.a2, 1))
@@ -337,18 +337,19 @@ class vanilla_beamforming(gr.top_block, Qt.QWidget):
         self.connect((self.torchdsp_phased_array_0, 2), (self.a3, 0))
         self.connect((self.torchdsp_phased_array_0, 3), (self.a4, 0))
         self.connect((self.torchdsp_quantize_0, 0), (self.blocks_multiply_matrix_xx_0, 0))
-        self.connect((self.torchdsp_quantize_0, 0), (self.blocks_multiply_matrix_xx_0_0, 0))
         self.connect((self.torchdsp_quantize_0, 0), (self.qtgui_freq_sink_x_0, 0))
         self.connect((self.torchdsp_quantize_0, 0), (self.qtgui_time_sink_x_0, 0))
+        self.connect((self.torchdsp_quantize_0, 0), (self.torchdsp_triton_beamform_cc_0, 0))
         self.connect((self.torchdsp_quantize_0_0, 0), (self.blocks_multiply_matrix_xx_0, 1))
-        self.connect((self.torchdsp_quantize_0_0, 0), (self.blocks_multiply_matrix_xx_0_0, 1))
         self.connect((self.torchdsp_quantize_0_0, 0), (self.qtgui_time_sink_x_0, 1))
+        self.connect((self.torchdsp_quantize_0_0, 0), (self.torchdsp_triton_beamform_cc_0, 1))
         self.connect((self.torchdsp_quantize_0_1, 0), (self.blocks_multiply_matrix_xx_0, 2))
-        self.connect((self.torchdsp_quantize_0_1, 0), (self.blocks_multiply_matrix_xx_0_0, 2))
         self.connect((self.torchdsp_quantize_0_1, 0), (self.qtgui_time_sink_x_0, 2))
+        self.connect((self.torchdsp_quantize_0_1, 0), (self.torchdsp_triton_beamform_cc_0, 2))
         self.connect((self.torchdsp_quantize_0_2, 0), (self.blocks_multiply_matrix_xx_0, 3))
-        self.connect((self.torchdsp_quantize_0_2, 0), (self.blocks_multiply_matrix_xx_0_0, 3))
         self.connect((self.torchdsp_quantize_0_2, 0), (self.qtgui_time_sink_x_0, 3))
+        self.connect((self.torchdsp_quantize_0_2, 0), (self.torchdsp_triton_beamform_cc_0, 3))
+        self.connect((self.torchdsp_triton_beamform_cc_0, 0), (self.qtgui_freq_sink_x_0_0_0, 0))
 
 
     def closeEvent(self, event):
@@ -432,6 +433,7 @@ def main(top_block_cls=vanilla_beamforming, options=None):
         style = gr.prefs().get_string('qtgui', 'style', 'raster')
         Qt.QApplication.setGraphicsSystem(style)
     qapp = Qt.QApplication(sys.argv)
+
 
     tb = top_block_cls()
 
